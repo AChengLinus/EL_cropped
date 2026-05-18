@@ -183,6 +183,17 @@ body.dark-bg .ed-hint{color:var(--gray-500);background:rgba(30,41,59,.5)}
 .ed-error{font-size:11px;color:var(--red-600);margin-top:6px;padding:8px 10px;background:rgba(254,226,226,.5);border-radius:6px;border-left:2px solid var(--red-400);display:none}
 body.dark-bg .ed-error{color:var(--red-400);background:rgba(127,29,29,.15);border-left-color:var(--red-500)}
 
+/* 角点坐标输入 */
+.ed-corners{margin-top:8px;padding:8px 10px;background:var(--gray-50);border-radius:6px;border:1px solid var(--gray-200)}
+body.dark-bg .ed-corners{background:rgba(30,41,59,.5);border-color:var(--gray-700)}
+.ed-cg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px}
+.ed-cg .cg{display:flex;align-items:center;gap:4px}
+.ed-cg .cg-lb{font-size:10px;color:var(--gray-500);min-width:28px}
+.ed-cg .cg input[type=number]{width:64px;padding:2px 4px;font-size:11px;border:1px solid var(--gray-300);border-radius:4px;background:#fff;color:var(--gray-800);font-family:Consolas,monospace}
+body.dark-bg .ed-cg .cg input[type=number]{background:var(--gray-800);border-color:var(--gray-600);color:var(--gray-200)}
+.ed-cg .cg input[type=number]:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 2px rgba(59,130,246,.2)}
+.ed-cg .cg .cg-sep{font-size:10px;color:var(--gray-400)}
+
 /* 亮度调整条 */
 .brow{display:flex;align-items:center;gap:6px;margin-top:7px;padding:5px 8px;background:var(--gray-50);border-radius:6px;width:fit-content;border:1px solid var(--gray-200)}
 body.dark-bg .brow{background:rgba(30,41,59,.5);border-color:var(--gray-700)}
@@ -513,6 +524,15 @@ body.auth-pending > :not(#login-screen){visibility:hidden}
       oninput="document.getElementById('cv').textContent=this.value">
     <span id="cv">8</span></div>
   <label class="ck"><input type="checkbox" id="ru"> 复用首张角点</label>
+  <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+    <div class="sl" style="margin-left:0"><label>输出W</label>
+      <input type="number" id="glbW" value="" placeholder="自动" style="width:68px;padding:2px 6px;font-size:12px;border:1px solid var(--gray-300);border-radius:5px;background:#fff;color:var(--gray-800)" onchange="onGlobalSizeChange()">
+    </div>
+    <div class="sl"><label>输出H</label>
+      <input type="number" id="glbH" value="" placeholder="自动" style="width:68px;padding:2px 6px;font-size:12px;border:1px solid var(--gray-300);border-radius:5px;background:#fff;color:var(--gray-800)" onchange="onGlobalSizeChange()">
+      <span style="font-size:11px;color:#94a3b8">px</span>
+    </div>
+  </div>
   <span style="font-size:12px;color:#555" id="itx"></span>
   <span id="save-ind"></span>
 </div>
@@ -567,8 +587,20 @@ body.auth-pending > :not(#login-screen){visibility:hidden}
     <button class="btn r" onclick="edClose()">&#10005; 关闭编辑器</button>
     <span style="font-size:11px;color:#555;margin-left:auto" id="ed-status"></span>
   </div>
+  <div class="ed-corners">
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="lb" style="margin:0;font-size:11px">角点坐标 (px)</span>
+      <button class="btn blue" style="font-size:10px;padding:1px 8px;height:22px" onclick="applyCornersToAll()" title="将当前角点应用到所有图片（等比缩放）">应用到全部</button>
+    </div>
+    <div class="ed-cg">
+      <div class="cg"><span class="cg-lb">左上</span><input type="number" id="ed-c0x" oninput="onCornerInput(0,0)"><span class="cg-sep">,</span><input type="number" id="ed-c0y" oninput="onCornerInput(0,1)"></div>
+      <div class="cg"><span class="cg-lb">右上</span><input type="number" id="ed-c1x" oninput="onCornerInput(1,0)"><span class="cg-sep">,</span><input type="number" id="ed-c1y" oninput="onCornerInput(1,1)"></div>
+      <div class="cg"><span class="cg-lb">右下</span><input type="number" id="ed-c2x" oninput="onCornerInput(2,0)"><span class="cg-sep">,</span><input type="number" id="ed-c2y" oninput="onCornerInput(2,1)"></div>
+      <div class="cg"><span class="cg-lb">左下</span><input type="number" id="ed-c3x" oninput="onCornerInput(3,0)"><span class="cg-sep">,</span><input type="number" id="ed-c3y" oninput="onCornerInput(3,1)"></div>
+    </div>
+  </div>
   <div class="ed-hint">
-    提示：将 4 个蓝色圆点拖到发光 LED 面板的准确四角，然后点击「应用裁剪」。<br>
+    提示：将 4 个蓝色圆点拖到发光 LED 面板的准确四角，或直接在角点坐标输入框中输入像素值，然后点击「应用裁剪」。<br>
     如果面板较暗，可降低外扩黑边值后重新自动检测。
   </div>
 </div>
@@ -1110,7 +1142,15 @@ function mkCard(i){
       <div class="pc"><div class="lb">原图（可拖动蓝点微调）</div><canvas id="OC${i}"></canvas></div>
       <div class="pc"><div class="lb">裁剪结果 <span id="RS${i}" style="font-size:10px;color:#64748b;font-weight:400;margin-left:6px"></span></div>
         <img id="RC${i}" style="display:none">
-        <div class="ph" id="PH${i}">处理中...</div></div>
+        <div class="ph" id="PH${i}">处理中...</div>
+        <div class="ht" id="HT${i}" style="display:none;margin-top:4px">
+          <span style="font-size:10px;color:#94a3b8">输出尺寸：</span>
+          <input type="number" id="TW${i}" value="" placeholder="W" style="width:64px;padding:1px 4px;font-size:11px;border:1px solid #e2e8f0;border-radius:4px" onchange="reapplyTargetSize(${i})">
+          <span style="font-size:10px;color:#94a3b8;margin:0 2px">×</span>
+          <input type="number" id="TH${i}" value="" placeholder="H" style="width:64px;padding:1px 4px;font-size:11px;border:1px solid #e2e8f0;border-radius:4px" onchange="reapplyTargetSize(${i})">
+          <span style="font-size:10px;color:#94a3b8">px</span>
+          <span id="TAG${i}" style="font-size:10px;color:#3b82f6;cursor:pointer;margin-left:4px" onclick="applyTargetSizeToAll(${i})" title="将此尺寸应用到全部图片">↻ 应用到全部</span>
+        </div></div>
     </div>
     <div id="DR${i}" style="display:none;padding:10px 0">
       <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center;flex-wrap:wrap">
@@ -1123,7 +1163,7 @@ function mkCard(i){
         <button class="btn s" id="DRDL${i}" style="font-size:11px;padding:3px 12px;margin-left:auto" onclick="dlOne(${i})">&#8595; 下载全部</button>
       </div>
       <div style="display:flex;gap:12px;align-items:stretch">
-        <div style="flex:0 0 35%;position:relative;display:flex;flex-direction:column">
+        <div style="flex:0 0 55%;position:relative;display:flex;flex-direction:column">
           <div class="lb" style="color:#2563eb;font-weight:600;margin-bottom:6px">原图 <span style="font-size:10px;color:#999">（拖动圆点调整角点）</span></div>
           <canvas id="DRCANV${i}" class="drcv" style="display:block;width:100%"></canvas>
         </div>
@@ -1679,6 +1719,12 @@ async function inlineEdApply(i){
     fd.append('image',files[i]);fd.append('pad',getPad())
 	    fd.append('pad_v',getPadV());
     fd.append('corners',JSON.stringify(cors[i]));
+    const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+    const glbW=document.getElementById('glbW'), glbH=document.getElementById('glbH');
+    const targetW=tw&&tw.value?parseInt(tw.value):(glbW&&glbW.value?parseInt(glbW.value):null);
+    const targetH=th&&th.value?parseInt(th.value):(glbH&&glbH.value?parseInt(glbH.value):null);
+    if(targetW) fd.append('target_w',targetW);
+    if(targetH) fd.append('target_h',targetH);
     const r=await fetch(API+'/process',{method:'POST',body:fd});
     const d=await r.json();
     if(d.ok){
@@ -1854,6 +1900,50 @@ function jumpToCard(){
   if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
+// ── 角点坐标输入同步 ──────────────────────────────────────────
+function updateCornerInputs(){
+  if(edIdx<0||!cors[edIdx])return;
+  const pts=cors[edIdx];
+  for(let j=0;j<4;j++){
+    const ix=document.getElementById('ed-c'+j+'x');
+    const iy=document.getElementById('ed-c'+j+'y');
+    if(ix)ix.value=Math.round(pts[j][0]);
+    if(iy)iy.value=Math.round(pts[j][1]);
+  }
+}
+
+function onCornerInput(ci,xy){
+  if(edIdx<0||!cors[edIdx])return;
+  const el=document.getElementById('ed-c'+ci+(xy?'y':'x'));
+  if(!el)return;
+  const v=parseInt(el.value);
+  if(isNaN(v))return;
+  const W=edImg?edImg.naturalWidth:9999,H=edImg?edImg.naturalHeight:9999;
+  cors[edIdx][ci][xy]=Math.max(0,Math.min(v,xy?H:W));
+  drawEdPts();
+}
+
+function applyCornersToAll(){
+  if(edIdx<0||!cors[edIdx]||!edImg)return;
+  const src=cors[edIdx];
+  const sw=edImg.naturalWidth,sh=edImg.naturalHeight;
+  if(!sw||!sh)return;
+  let count=0;
+  for(let i=0;i<files.length;i++){
+    if(i===edIdx||!files[i])continue;
+    // 按目标图尺寸等比缩放角点
+    cors[i]=src.map(([x,y])=>[Math.round(x),Math.round(y)]);
+    count++;
+    // 如果有内联缩略图，同步更新显示
+    const oc=document.getElementById('OC'+i);
+    if(oc&&oc._loaded){
+      drawPts(i, oc._W, oc._H, oc);
+    }
+  }
+  const msg=count+' 张图片已应用相同角点'+(count>0?'（绝对像素值）':'');
+  document.getElementById('ed-status').textContent='✓ '+msg;
+}
+
 function drawEdPts(){
   if(!edImg||edIdx<0)return;
   const cv=document.getElementById('ed-canvas');
@@ -1878,6 +1968,7 @@ function drawEdPts(){
     ctx.fillStyle='#fff';ctx.font='bold '+(r*1.1|0)+'px sans-serif';ctx.textAlign='left';
     ctx.fillText(lb,x+r+4,y+r*0.4);
   });
+  updateCornerInputs();
 }
 // 全局保存监听器引用，每次重新绑定前先移除旧的，防止累积
 let _edMD=null, _edMM=null, _edMU=null, _edTS=null, _edTM=null, _edTU=null;
@@ -1984,6 +2075,12 @@ async function edApply(){
     fd.append('image',files[i]);fd.append('pad',getPad())
 	    fd.append('pad_v',getPadV());
     fd.append('corners',JSON.stringify(cors[i]));
+    const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+    const glbW=document.getElementById('glbW'), glbH=document.getElementById('glbH');
+    const targetW=tw&&tw.value?parseInt(tw.value):(glbW&&glbW.value?parseInt(glbW.value):null);
+    const targetH=th&&th.value?parseInt(th.value):(glbH&&glbH.value?parseInt(glbH.value):null);
+    if(targetW) fd.append('target_w',targetW);
+    if(targetH) fd.append('target_h',targetH);
     const r=await fetch(API+'/process',{method:'POST',body:fd});
     const d=await r.json();
     if(d.ok){
@@ -2234,6 +2331,13 @@ async function one(i,fc2){
     fd.append('image',files[i]);fd.append('pad',getPad())
 	    fd.append('pad_v',getPadV());
     if(fc2) fd.append('corners',JSON.stringify(fc2));
+    // 目标输出尺寸
+    const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+    const glbW=document.getElementById('glbW'), glbH=document.getElementById('glbH');
+    const targetW=tw&&tw.value?parseInt(tw.value):(glbW&&glbW.value?parseInt(glbW.value):null);
+    const targetH=th&&th.value?parseInt(th.value):(glbH&&glbH.value?parseInt(glbH.value):null);
+    if(targetW) fd.append('target_w',targetW);
+    if(targetH) fd.append('target_h',targetH);
     const r=await fetch(API+'/process',{method:'POST',body:fd,signal:ac.signal});
     clearTimeout(timeoutTimer);delete abortCtrls[i];
     const d=await r.json();
@@ -2275,7 +2379,7 @@ async function one(i,fc2){
 
 // ── 无人机模式：单张处理 → 三张结果 ──────────────────────
 let droneMeta={};   // droneMeta[i] = {meta, allCorners:[[4pts],[4pts],[4pts]], srcImg}
-const _drColors=['#3b82f6','#2563eb','#60a5fa']; // 左=亮蓝 中=深蓝 右=浅蓝
+const _drColors=['#3b82f6','#2563eb','#558ed4']; // 左=亮蓝 中=深蓝 右=浅蓝
 const _drLabels=['左','中','右'];
 
 async function oneDrone(i){
@@ -2760,7 +2864,7 @@ function _droneDrawCanvas(i){
     const isActive=(pi===activePi);
 
     // 线框：激活的粗实线，其他暗淡虚线
-    ctx.strokeStyle=isActive?col:(col+'40');
+    ctx.strokeStyle=isActive?col:(col+'80');
     ctx.lineWidth=isActive?2.5:1;
     ctx.setLineDash(isActive?[]:[4,4]);
     ctx.beginPath();
@@ -2777,24 +2881,45 @@ function _droneDrawCanvas(i){
         ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='left';
         ctx.fillText(lb,x*sc+9,y*sc+3);
       });
+      // 画边线中点拖动手柄（菱形）
+      [[0,1,'上'],[1,2,'右'],[2,3,'下'],[3,0,'左']].forEach(([i1,i2])=>{
+        const ex=(pts[i1][0]+pts[i2][0])/2*sc;
+        const ey=(pts[i1][1]+pts[i2][1])/2*sc;
+        ctx.beginPath();ctx.moveTo(ex-7,ey);ctx.lineTo(ex,ey-7);
+        ctx.lineTo(ex+7,ey);ctx.lineTo(ex,ey+7);ctx.closePath();
+        ctx.fillStyle=col;ctx.globalAlpha=0.75;ctx.fill();ctx.globalAlpha=1;
+        ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+      });
     }
 
     // 标签
     const cx=pts.reduce((a,p)=>a+p[0],0)/4*sc;
     const cy=pts.reduce((a,p)=>a+p[1],0)/4*sc;
-    ctx.globalAlpha=isActive?1:0.3;
+    ctx.globalAlpha=isActive?1:0.55;
     ctx.fillStyle=col;ctx.font='bold 13px sans-serif';ctx.textAlign='center';
     ctx.fillText(_drLabels[pi],cx,cy);
     ctx.globalAlpha=1;
   }
 }
 
-// ── 无人机：拖动角点交互（只拖动激活面板） ─────────────
+// ── 无人机：拖动角点/边线交互（只拖动激活面板） ─────────
 function _droneBindDrag(i){
   const cv=document.getElementById('DRCANV'+i); if(!cv)return;
   let dragPt=-1;
+  let dragEdge=-1;
   let isDragging=false;
-  const hitR=24; // 增大检测半径，方便点击
+  const hitR=24;
+
+  // 点到线段距离的平方
+  function distToSegmentSq(px,py,x1,y1,x2,y2){
+    const dx=x2-x1, dy=y2-y1;
+    const lenSq=dx*dx+dy*dy;
+    if(lenSq===0)return (px-x1)*(px-x1)+(py-y1)*(py-y1);
+    let t=((px-x1)*dx+(py-y1)*dy)/lenSq;
+    t=Math.max(0,Math.min(1,t));
+    const nx=x1+t*dx, ny=y1+t*dy;
+    return (px-nx)*(px-nx)+(py-ny)*(py-ny);
+  }
 
   function getPos(e){
     const rect=cv.getBoundingClientRect();
@@ -2822,7 +2947,7 @@ function _droneBindDrag(i){
     const activePi=(droneActivePanel[i]!==undefined)?droneActivePanel[i]:0;
     const pts=m.allCorners[activePi];
     if(!pts){console.warn('No corners found for panel',activePi);return;}
-    // 只在激活面板的4个角点中找
+    // 优先检测角点
     let bestD=hitR*hitR, bpt=-1;
     for(let j=0;j<4;j++){
       const dx=pts[j][0]*sc-mx, dy=pts[j][1]*sc-my;
@@ -2833,32 +2958,74 @@ function _droneBindDrag(i){
       dragPt=bpt;
       isDragging=true;
       cv.style.cursor='grabbing';
-    } else {
-      cv.style.cursor='crosshair';
+      return;
     }
+    // 再检测边线：0上 1右 2下 3左
+    for(let j=0;j<4;j++){
+      const p1=pts[j], p2=pts[(j+1)%4];
+      const d=distToSegmentSq(mx,my,p1[0]*sc,p1[1]*sc,p2[0]*sc,p2[1]*sc);
+      if(d<hitR*hitR){
+        dragEdge=j;
+        isDragging=true;
+        cv.style.cursor=j%2===0?'ns-resize':'ew-resize';
+        return;
+      }
+    }
+    cv.style.cursor='crosshair';
   }
 
   function onMove(e){
-    if(dragPt<0)return;
-    e.preventDefault();
-    e.stopPropagation();
-    const [mx,my]=getPos(e);
     const m=droneMeta[i]; if(!m)return;
     if(cv.width===0||cv.height===0||m.srcW===0||m.srcH===0)return;
-    // canvas缓冲区坐标→源图坐标的缩放比（均匀缩放，scX==scY）
     const sc=cv.width/m.srcW;
     const activePi=(droneActivePanel[i]!==undefined)?droneActivePanel[i]:0;
     if(!m.allCorners[activePi])return;
-    m.allCorners[activePi][dragPt]=[
-      Math.max(0,Math.min(m.srcW,mx/sc)),
-      Math.max(0,Math.min(m.srcH,my/sc))
-    ];
-    _droneDrawCanvas(i);
+    const pts=m.allCorners[activePi];
+    const [mx,my]=getPos(e);
+
+    if(dragPt>=0){
+      // ── 拖动角点 ──
+      e.preventDefault();
+      e.stopPropagation();
+      pts[dragPt]=[
+        Math.max(0,Math.min(m.srcW,mx/sc)),
+        Math.max(0,Math.min(m.srcH,my/sc))
+      ];
+      _droneDrawCanvas(i);
+    }else if(dragEdge>=0){
+      // ── 拖动边线（同时移动两个角点） ──
+      e.preventDefault();
+      e.stopPropagation();
+      const nx=Math.max(0,Math.min(m.srcW,mx/sc));
+      const ny=Math.max(0,Math.min(m.srcH,my/sc));
+      if(dragEdge===0){pts[0][1]=ny;pts[1][1]=ny;}          // 上边 → 调TL/TR的Y
+      else if(dragEdge===1){pts[1][0]=nx;pts[2][0]=nx;}      // 右边 → 调TR/BR的X
+      else if(dragEdge===2){pts[2][1]=ny;pts[3][1]=ny;}      // 下边 → 调BR/BL的Y
+      else if(dragEdge===3){pts[3][0]=nx;pts[0][0]=nx;}      // 左边 → 调BL/TL的X
+      _droneDrawCanvas(i);
+    }else{
+      // ── 悬停：更新鼠标形状 ──
+      let found=false;
+      for(let j=0;j<4;j++){
+        const dx=pts[j][0]*sc-mx, dy=pts[j][1]*sc-my;
+        if(dx*dx+dy*dy<hitR*hitR){cv.style.cursor='grab';found=true;break;}
+      }
+      if(!found){
+        for(let j=0;j<4;j++){
+          const p1=pts[j], p2=pts[(j+1)%4];
+          if(distToSegmentSq(mx,my,p1[0]*sc,p1[1]*sc,p2[0]*sc,p2[1]*sc)<hitR*hitR){
+            cv.style.cursor=j%2===0?'ns-resize':'ew-resize';found=true;break;
+          }
+        }
+      }
+      if(!found)cv.style.cursor='crosshair';
+    }
   }
 
   function onUp(){
-    if(dragPt<0)return;
-    dragPt=-1;isDragging=false;cv.style.cursor='crosshair';
+    if(dragPt<0&&dragEdge<0)return;
+    dragPt=-1;dragEdge=-1;isDragging=false;cv.style.cursor='crosshair';
+    // 拖动结束立即触发重裁，更新输出结果
     const activePi=(droneActivePanel[i]!==undefined)?droneActivePanel[i]:0;
     _droneRecrop(i, activePi);
   }
@@ -2872,7 +3039,6 @@ function _droneBindDrag(i){
   // 全屏或窗口大小变化时重绘canvas
   const _resizeHandler=()=>{if(droneMeta[i])_droneDrawCanvas(i);};
   window.addEventListener('resize',_resizeHandler);
-  // 监听全屏变化
   document.addEventListener('fullscreenchange',_resizeHandler);
   document.addEventListener('webkitfullscreenchange',_resizeHandler);
 }
@@ -2925,6 +3091,8 @@ async function _droneRecrop(i, pi){
           }).catch(()=>{});
         }
       }
+      // 保存到会话存档
+      saveSessionImage(i, url, label).then(() => scheduleSaveMeta());
       inf(i,'已更新 '+label+' 面板');
     } else {
       if(el)el.style.opacity='1';
@@ -2962,10 +3130,52 @@ function showRes(i,url){
 function updateResDisplay(i,w,h){
   const el=document.getElementById('RS'+i);
   if(el) el.textContent=w+'×'+h+' px';
+  const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+  if(tw&&!tw.dataset.userSet) tw.value=w;
+  if(th&&!th.dataset.userSet) th.value=h;
 }
 function updateDroneResDisplay(i,pi,w,h){
   const el=document.getElementById('DRRS'+pi+'_'+i);
   if(el) el.textContent=w+'×'+h+' px';
+}
+
+// ── 目标输出尺寸控制 ──────────────────────────────
+function reapplyTargetSize(i){
+  if(!files[i]) return;
+  const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+  tw.dataset.userSet='1'; th.dataset.userSet='1';
+  // 清除全局值，使用单张自定义值
+  reapply(i);
+}
+
+function applyTargetSizeToAll(i){
+  const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+  if(!tw||!th) return;
+  const w=parseInt(tw.value), h=parseInt(th.value);
+  if(!w||!h){alert('请先设置有效的W和H值');return;}
+  if(!confirm('确定将 W='+w+' H='+h+' 应用到所有图片？')) return;
+  for(let j=0;j<files.length;j++){
+    const tjw=document.getElementById('TW'+j), tjh=document.getElementById('TH'+j);
+    if(tjw){tjw.value=w; tjw.dataset.userSet='1';}
+    if(tjh){tjh.value=h; tjh.dataset.userSet='1';}
+  }
+  // 将所有图片重新裁剪
+  for(let j=0;j<files.length;j++){
+    if(urls[j]||droneUrls[j]) reapply(j);
+  }
+}
+
+function onGlobalSizeChange(){
+  const glbW=document.getElementById('glbW'), glbH=document.getElementById('glbH');
+  const w=glbW&&glbW.value?parseInt(glbW.value):null;
+  const h=glbH&&glbH.value?parseInt(glbH.value):null;
+  if(!w&&!h) return;
+  // 清除所有单张自定义标记，使用全局值
+  for(let j=0;j<files.length;j++){
+    const tjw=document.getElementById('TW'+j), tjh=document.getElementById('TH'+j);
+    if(tjw){tjw.dataset.userSet=''; if(w)tjw.value=w;}
+    if(tjh){tjh.dataset.userSet=''; if(h)tjh.value=h;}
+  }
 }
 
 function drawPts(i,W,H,cv){
@@ -3000,6 +3210,12 @@ async function reapply(i){
     const fd=new FormData();fd.append('image',files[i]);fd.append('pad',getPad())
 	    fd.append('pad_v',getPadV());
     if(cors[i])fd.append('corners',JSON.stringify(cors[i]));
+    const tw=document.getElementById('TW'+i), th=document.getElementById('TH'+i);
+    const glbW=document.getElementById('glbW'), glbH=document.getElementById('glbH');
+    const targetW=tw&&tw.value?parseInt(tw.value):(glbW&&glbW.value?parseInt(glbW.value):null);
+    const targetH=th&&th.value?parseInt(th.value):(glbH&&glbH.value?parseInt(glbH.value):null);
+    if(targetW) fd.append('target_w',targetW);
+    if(targetH) fd.append('target_h',targetH);
     const r=await fetch(API+'/process',{method:'POST',body:fd}),d=await r.json();
     if(d.ok){
       cors[i]=d.corners;urls[i]='data:image/jpeg;base64,'+d.jpeg_b64;

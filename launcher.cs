@@ -132,9 +132,12 @@ public class Launcher : Form {
         LoadPrefs();
         if (chkAutoStart.Checked) BeginInvoke(new Action(StartService));
 
-        statusTimer = new System.Windows.Forms.Timer { Interval = 1200 };
+        int _feSkip = 0;
+        statusTimer = new System.Windows.Forms.Timer { Interval = 5000 };
         statusTimer.Tick += (s, e) => {
-            bool be = TestBackend(), fe = be && TestFrontend();
+            bool be = TestBackend();
+            bool fe = be && (++_feSkip % 2 == 0) && TestFrontend();
+            if (!be) fe = false;
             SetStatus(be, fe);
             if (be && fe && !autoOpened && (chkAutoOpen.Checked || forceOpen)) {
                 autoOpened = true; forceOpen = false;
@@ -149,8 +152,10 @@ public class Launcher : Form {
 
         FormClosing += (s, e) => {
             statusTimer.Stop(); logTimer.Stop();
-            if (TestBackend() && MessageBox.Show("检测到服务仍在运行。是否同时停止前端/后端本地服务？\n\n选择[是]：停止服务并关闭启动器\n选择[否]：仅关闭启动器，服务继续运行", "关闭启动器", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                StopService();
+            if (TestBackend() && MessageBox.Show("检测到服务仍在运行。是否同时停止前端/后端本地服务？\n\n选择[是]：停止服务并关闭启动器\n选择[否]：仅关闭启动器，服务继续运行", "关闭启动器", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+                try { Process.Start("taskkill", "/F /IM python.exe").WaitForExit(2000); } catch { }
+                proc = null;
+            }
         };
     }
 
@@ -307,16 +312,39 @@ public class Launcher : Form {
     }
 
     void StopService() {
-        var pids = GetPortPids();
-        if (pids.Count == 0) { QueueLog("没有发现需要停止的服务进程。"); proc = null; return; }
-        QueueLog("停止服务进程：" + string.Join(", ", pids));
-        foreach (int pid in pids)
-            try { Process.Start("taskkill", "/PID " + pid + " /T /F").WaitForExit(); } catch { }
-        Thread.Sleep(500);
-        proc = null; autoOpened = false; forceOpen = false;
+        QueueLog("正在停止服务...");
+        new Thread(() => {
+            try {
+                var pids = GetPortPids();
+                if (pids.Count == 0) {
+                    QueueLog("没有发现需要停止的服务进程。");
+                } else {
+                    QueueLog("停止服务进程：" + string.Join(", ", pids));
+                    foreach (int pid in pids)
+                        Process.Start("taskkill", "/F /PID " + pid).WaitForExit(3000);
+                }
+            } catch (Exception ex) {
+                QueueLog("停止服务时出错：" + ex.Message);
+            }
+            proc = null; autoOpened = false; forceOpen = false;
+        }) { IsBackground = true }.Start();
     }
 
-    void RestartService() { StopService(); Thread.Sleep(500); StartService(); }
+    void RestartService() {
+        QueueLog("正在重启服务...");
+        new Thread(() => {
+            try {
+                var pids = GetPortPids();
+                if (pids.Count > 0) {
+                    foreach (int pid in pids)
+                        Process.Start("taskkill", "/F /PID " + pid).WaitForExit(3000);
+                }
+            } catch { }
+            proc = null; autoOpened = false; forceOpen = false;
+            Thread.Sleep(500);
+            BeginInvoke(new Action(StartService));
+        }) { IsBackground = true }.Start();
+    }
 
     List<int> GetPortPids() {
         var pids = new List<int>();

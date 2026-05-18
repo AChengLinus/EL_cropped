@@ -517,10 +517,13 @@ def detect_corners_v2(img, pad_pct=0.005, v_pad=None):
     return pts
 
 
-def warp_image(img, pts):
+def warp_image(img, pts, target_w=None, target_h=None):
     tl, tr, br, bl = pts
-    dw = int(max(np.linalg.norm(tr - tl), np.linalg.norm(br - bl)))
-    dh = int(max(np.linalg.norm(bl - tl), np.linalg.norm(br - tr)))
+    if target_w and target_h:
+        dw, dh = int(target_w), int(target_h)
+    else:
+        dw = int(max(np.linalg.norm(tr - tl), np.linalg.norm(br - bl)))
+        dh = int(max(np.linalg.norm(bl - tl), np.linalg.norm(br - tr)))
     if dw < 10 or dh < 10:
         raise ValueError('Invalid corners')
     dst = np.array([[0, 0], [dw, 0], [dw, dh], [0, dh]], dtype=np.float32)
@@ -530,7 +533,7 @@ def warp_image(img, pts):
     return cv2.warpPerspective(img, M, (dw, dh))
 
 
-def process_image(img_bytes, pad_pct, forced=None, img_name=None, v_pad=None):
+def process_image(img_bytes, pad_pct, forced=None, img_name=None, v_pad=None, target_w=None, target_h=None):
     """
     处理优先级：
       1. forced（前端手动编辑角点） → 直接使用
@@ -582,7 +585,7 @@ def process_image(img_bytes, pad_pct, forced=None, img_name=None, v_pad=None):
                 return None, None, 'Panel not detected'
             pts = _apply_learned_bias(pts, W, H)
 
-        warped = warp_image(img, pts)
+        warped = warp_image(img, pts, target_w, target_h)
         ok, buf = cv2.imencode('.jpg', warped, [cv2.IMWRITE_JPEG_QUALITY, 95])
         return (buf.tobytes(), pts.tolist(), None) if ok else (None, None, 'Encode failed')
     except Exception as e:
@@ -1645,7 +1648,11 @@ def process():
         forced  = json.loads(request.form['corners']) \
                   if request.form.get('corners') else None
         img_name = request.form.get('name', None)
-        jpeg, corners, err = process_image(f.read(), pad, forced, img_name, pad_v)
+        target_w = request.form.get('target_w', None)
+        target_h = request.form.get('target_h', None)
+        if target_w is not None: target_w = int(target_w)
+        if target_h is not None: target_h = int(target_h)
+        jpeg, corners, err = process_image(f.read(), pad, forced, img_name, pad_v, target_w, target_h)
         if err: return jsonify({'ok': False, 'error': err})
         return jsonify({'ok': True,
                         'jpeg_b64': base64.b64encode(jpeg).decode(),
@@ -1666,9 +1673,13 @@ def batch():
     names = json.loads(names_raw) if names_raw else [None] * len(fs)
     if len(names) != len(fs):
         names = [None] * len(fs)
+    target_w = request.form.get('target_w', None)
+    target_h = request.form.get('target_h', None)
+    if target_w is not None: target_w = int(target_w)
+    if target_h is not None: target_h = int(target_h)
 
     def proc(f, name):
-        return process_image(f.read(), pad, forced, name, pad_v)
+        return process_image(f.read(), pad, forced, name, pad_v, target_w, target_h)
 
     futures = {pool.submit(proc, f, n): i for i, (f, n) in enumerate(zip(fs, names))}
     results = [None] * len(fs)
@@ -1957,24 +1968,26 @@ def session_load(sid):
         with open(meta_file, 'r', encoding='utf-8') as f:
             meta = json.load(f)
         existing = []
+        existing_drone = []
         for fn in glob.glob(os.path.join(sp, 'img_*.jpg')):
             base = os.path.basename(fn)
+            key = base.replace('img_', '').replace('.jpg', '')
             try:
-                idx = int(base.replace('img_', '').replace('.jpg', ''))
-                existing.append(idx)
+                existing.append(int(key))
             except ValueError:
-                pass
+                existing_drone.append(key)
         meta['existing_imgs'] = existing
+        meta['existing_drone_imgs'] = existing_drone
         return jsonify({'ok': True, 'exists': True, 'meta': meta})
     except Exception as e:
         return jsonify({'ok': False, 'error': str(e)})
 
-@app.route('/session/img/<sid>/<int:idx>')
+@app.route('/session/img/<sid>/<path:idx>')
 def session_img(sid, idx):
     sp = _sess_path(sid)
     if not sp:
         return ('', 404)
-    img_path = os.path.join(sp, 'img_%d.jpg' % idx)
+    img_path = os.path.join(sp, 'img_%s.jpg' % idx)
     if not os.path.exists(img_path):
         return ('', 404)
     with open(img_path, 'rb') as f:
