@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>华矩EL裁剪工具 — 太阳能电池板EL检测图像自动裁剪</title>
+<title data-i18n="page_title">华矩EL裁剪工具 — 太阳能电池板EL检测图像自动裁剪</title>
+<link rel="icon" type="image/png" sizes="131x96" href="images/favicon.png">
+<link rel="icon" type="image/png" sizes="43x32" href="images/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -26,6 +28,109 @@
   --radius-sm: 8px;
 }
 
+/* ===== Day Mode (蓝天白云) ===== */
+[data-theme="day"] {
+  --bg-primary: #e8f4fd;
+  --bg-secondary: #d0e8f7;
+  --bg-card: rgba(255, 255, 255, 0.78);
+  --bg-card-hover: rgba(255, 255, 255, 0.92);
+  --border: rgba(135, 206, 235, 0.25);
+  --border-hover: rgba(135, 206, 235, 0.5);
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #8899aa;
+  --accent: #2563eb;
+  --accent-glow: rgba(37, 99, 235, 0.08);
+}
+
+[data-theme="day"] body::before {
+  background:
+    radial-gradient(800px circle at 20% 30%, rgba(135, 206, 235, 0.08) 0%, transparent 70%),
+    radial-gradient(600px circle at 80% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 70%) !important;
+}
+
+[data-theme="day"] .grid-overlay {
+  background-image:
+    linear-gradient(rgba(135, 206, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(135, 206, 235, 0.06) 1px, transparent 1px) !important;
+}
+
+[data-theme="day"] .navbar {
+  background: rgba(232, 244, 253, 0.85);
+  border-bottom-color: rgba(135, 206, 235, 0.2);
+}
+
+[data-theme="day"] .hero::before {
+  background: linear-gradient(135deg, rgba(232, 244, 253, 0.92) 30%, rgba(232, 244, 253, 0.6) 60%, rgba(232, 244, 253, 0.85) 100%) !important;
+}
+
+[data-theme="day"] .terminal-line {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(135, 206, 235, 0.2);
+}
+
+[data-theme="day"] .lightbox {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="day"] .nav-links.open {
+  background: rgba(232, 244, 253, 0.98);
+  border-bottom-color: rgba(135, 206, 235, 0.2);
+}
+
+[data-theme="day"] .hero-badge {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="day"] .feature-icon {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="day"] .step-num {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="day"] .feature-tag {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="day"] .screenshot-card .step-badge {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+/* Toggle Buttons */
+.toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.2s;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.toggle-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.theme-icon-btn {
+  font-size: 16px;
+  padding: 5px 8px;
+  line-height: 1;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
@@ -41,6 +146,7 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* Ambient background effect */
@@ -53,6 +159,7 @@ body::before {
     radial-gradient(600px circle at 80% 70%, rgba(6, 182, 212, 0.03) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
+  transition: background 0.4s ease;
 }
 
 /* Grid overlay */
@@ -65,6 +172,7 @@ body::before {
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
+  transition: background-image 0.4s ease;
 }
 
 .container {
@@ -84,6 +192,7 @@ body::before {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
+  transition: background 0.4s ease, border-color 0.4s ease;
 }
 
 .navbar .container {
@@ -190,6 +299,7 @@ body::before {
   inset: 0;
   background: linear-gradient(135deg, rgba(10, 10, 15, 0.92) 30%, rgba(10, 10, 15, 0.6) 60%, rgba(10, 10, 15, 0.85) 100%);
   pointer-events: none;
+  transition: background 0.4s ease;
 }
 
 .hero-content {
@@ -310,6 +420,7 @@ body::before {
   font-size: 14px;
   color: var(--text-secondary);
   margin-top: 48px;
+  transition: background 0.4s ease, border-color 0.4s ease;
 }
 
 .terminal-line .prompt {
@@ -349,6 +460,7 @@ body::before {
   backdrop-filter: blur(10px);
   padding: 32px 24px;
   text-align: center;
+  transition: background 0.4s ease;
 }
 
 .stat-number {
@@ -418,7 +530,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 28px;
-  transition: all 0.3s;
+  transition: all 0.3s, background 0.4s ease;
   position: relative;
   overflow: hidden;
 }
@@ -498,6 +610,7 @@ body::before {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  transition: background 0.4s ease;
 }
 
 .arch-node {
@@ -629,7 +742,7 @@ body::before {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  transition: all 0.2s;
+  transition: all 0.2s, background 0.4s ease;
   align-items: flex-start;
 }
 
@@ -683,6 +796,7 @@ body::before {
   grid-template-columns: 1fr auto;
   gap: 24px;
   align-items: center;
+  transition: background 0.4s ease;
 }
 
 .login-box h3 {
@@ -741,6 +855,7 @@ body::before {
   border-top: 1px solid var(--border);
   padding: 40px 0;
   text-align: center;
+  transition: border-color 0.4s ease;
 }
 
 .footer p {
@@ -773,6 +888,10 @@ body::before {
     gap: 20px;
     border-bottom: 1px solid var(--border);
     align-items: flex-start;
+  }
+  [data-theme="day"] .nav-links.open {
+    background: rgba(232, 244, 253, 0.98);
+    border-bottom-color: rgba(135, 206, 235, 0.2);
   }
   .stats-bar { grid-template-columns: repeat(2, 1fr); }
   .features-grid { grid-template-columns: 1fr; }
@@ -894,6 +1013,7 @@ body::before {
   justify-content: center;
   padding: 40px;
   cursor: zoom-out;
+  transition: background 0.4s ease;
 }
 
 .lightbox.open {
@@ -1075,17 +1195,23 @@ body::before {
 <nav class="navbar">
   <div class="container">
     <a href="#" class="nav-logo">
-      <img src="images/logo.png" alt="华矩EL测试仪" style="height:156px;width:auto;display:block">
+      <img src="images/logo.png" alt="华矩EL测试仪" data-i18n-alt="logo_alt" style="height:156px;width:auto;display:block">
     </a>
     <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
     <ul class="nav-links">
-      <li><a href="#features">功能特性</a></li>
-      <li><a href="#screenshots">界面截图</a></li>
-      <li><a href="#architecture">架构</a></li>
-      <li><a href="#showcase">效果展示</a></li>
-      <li><a href="#tech">技术栈</a></li>
-      <li><a href="#usage">使用教程</a></li>
-      <li><a href="http://192.168.3.119:15789" class="nav-gh-btn" target="_blank">打开工具 →</a></li>
+      <li><a href="#features" data-i18n="nav.features">功能特性</a></li>
+      <li><a href="#screenshots" data-i18n="nav.screenshots">界面截图</a></li>
+      <li><a href="#architecture" data-i18n="nav.architecture">架构</a></li>
+      <li><a href="#showcase" data-i18n="nav.showcase">效果展示</a></li>
+      <li><a href="#tech" data-i18n="nav.tech">技术栈</a></li>
+      <li><a href="#usage" data-i18n="nav.usage">使用教程</a></li>
+      <li style="display:flex;gap:6px">
+        <button class="toggle-btn theme-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换主题">
+          <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="toggle-btn" id="langToggle" onclick="toggleLanguage()" title="Switch Language">EN</button>
+      </li>
+      <li><a href="http://192.168.3.119:15789" class="nav-gh-btn" target="_blank" data-i18n="nav.open_tool">打开工具 →</a></li>
     </ul>
   </div>
 </nav>
@@ -1094,27 +1220,27 @@ body::before {
 <section class="hero" id="hero">
   <div class="container">
     <div class="hero-content">
-      <img src="images/logo.png" alt="华矩EL测试仪" style="height:216px;width:auto;display:block;margin-bottom:24px">
+      <img src="images/logo.png" alt="华矩EL测试仪" data-i18n-alt="logo_alt" style="height:216px;width:auto;display:block;margin-bottom:24px">
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        v1.1 — 生产就绪
+        <span data-i18n="hero.badge">v1.1 — 生产就绪</span>
       </div>
       <h1>
-        太阳能电池板<br>
-        <span class="gradient">EL 检测图像</span><br>
-        自动透视裁剪
+        <span data-i18n="hero.title1">太阳能电池板</span><br>
+        <span class="gradient" data-i18n="hero.title2">EL 检测图像</span><br>
+        <span data-i18n="hero.title3">自动透视裁剪</span>
       </h1>
-      <p>
+      <p data-i18n="hero.desc">
         基于计算机视觉的智能裁剪工具。自动检测电致发光（EL）照片中电池面板的四个角点，
         通过透视变换矫正为规整矩形。支持普通拍摄和无人机拍摄两种模式。
       </p>
       <div class="hero-actions">
         <a href="http://192.168.3.119:15789" class="btn-primary" target="_blank">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          快速开始
+          <span data-i18n="hero.quick_start">快速开始</span>
         </a>
         <a href="#features" class="btn-secondary">
-          了解更多
+          <span data-i18n="hero.learn_more">了解更多</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
         </a>
       </div>
@@ -1122,7 +1248,7 @@ body::before {
         <span class="prompt">$</span>
         <span class="cmd">python app/app.py</span>
         <span class="cursor"></span>
-        <span style="color:var(--text-muted);font-weight:400;">— 服务运行在 192.168.3.119:15789</span>
+        <span style="color:var(--text-muted);font-weight:400;" data-i18n="hero.service_at">— 服务运行在 192.168.3.119:15789</span>
       </div>
     </div>
   </div>
@@ -1133,19 +1259,19 @@ body::before {
   <div class="stats-bar fade-in">
     <div class="stat-item">
       <div class="stat-number">300</div>
-      <div class="stat-label">张 / 分钟 <span style="color:var(--text-muted)">(GPU)</span></div>
+      <div class="stat-label" data-i18n="stats.imgs_per_min">张 / 分钟 <span style="color:var(--text-muted)">(GPU)</span></div>
     </div>
     <div class="stat-item">
       <div class="stat-number">99%</div>
-      <div class="stat-label">自动检测成功率</div>
+      <div class="stat-label" data-i18n="stats.success_rate">自动检测成功率</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">3</div>
-      <div class="stat-label">检测算法级联</div>
+      <div class="stat-label" data-i18n="stats.alg_cascade">检测算法级联</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">v4.0</div>
-      <div class="stat-label">检测内核版本</div>
+      <div class="stat-label" data-i18n="stats.kernel_ver">检测内核版本</div>
     </div>
   </div>
 </div>
@@ -1154,63 +1280,63 @@ body::before {
 <section class="section" id="features">
   <div class="container">
     <div class="section-label">Features</div>
-    <h2 class="section-title">核心功能特性</h2>
-    <p class="section-subtitle">从图像预处理到透视变换矫正，全自动完成 EL 检测图像的裁剪工作。</p>
+    <h2 class="section-title" data-i18n="features.title">核心功能特性</h2>
+    <p class="section-subtitle" data-i18n="features.subtitle">从图像预处理到透视变换矫正，全自动完成 EL 检测图像的裁剪工作。</p>
 
     <div class="features-grid">
       <div class="feature-card fade-in">
         <div class="feature-icon">🔍</div>
-        <h3>自动角点检测</h3>
-        <p>基于 Hough 直线检测 + 亮度阈值双算法，精准定位面板边框。检测失败时自动降级到备用算法，鲁棒性高。</p>
+        <h3 data-i18n="features.card1_title">自动角点检测</h3>
+        <p data-i18n="features.card1_desc">基于 Hough 直线检测 + 亮度阈值双算法，精准定位面板边框。检测失败时自动降级到备用算法，鲁棒性高。</p>
         <span class="feature-tag">Hough + Otsu</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">🔄</div>
-        <h3>透视变换矫正</h3>
-        <p>将倾斜拍摄的面板通过透视变换矫正为标准矩形，支持水平/垂直外扩比例独立调节，保留完整面板内容。</p>
+        <h3 data-i18n="features.card2_title">透视变换矫正</h3>
+        <p data-i18n="features.card2_desc">将倾斜拍摄的面板通过透视变换矫正为标准矩形，支持水平/垂直外扩比例独立调节，保留完整面板内容。</p>
         <span class="feature-tag">WarpPerspective</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">✈️</div>
-        <h3>无人机模式</h3>
-        <p>一张包含多个面板的无人机 EL 照片自动裁出左、中、右最多 3 块独立面板，自适应面板数量，自动跳过不完整面板。</p>
+        <h3 data-i18n="features.card3_title">无人机模式</h3>
+        <p data-i18n="features.card3_desc">一张包含多个面板的无人机 EL 照片自动裁出左、中、右最多 3 块独立面板，自适应面板数量，自动跳过不完整面板。</p>
         <span class="feature-tag">Batch Drone</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">🧠</div>
-        <h3>学习系统</h3>
-        <p>记录用户手动修正的角点位置，积累 ≥3 条后自动叠加偏差优化后续检测。越用越准，适应不同拍摄环境。</p>
+        <h3 data-i18n="features.card4_title">学习系统</h3>
+        <p data-i18n="features.card4_desc">记录用户手动修正的角点位置，积累 ≥3 条后自动叠加偏差优化后续检测。越用越准，适应不同拍摄环境。</p>
         <span class="feature-tag">偏差叠加</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">⚡</div>
-        <h3>GPU 硬件加速</h3>
-        <p>自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。</p>
+        <h3 data-i18n="features.card5_title">GPU 硬件加速</h3>
+        <p data-i18n="features.card5_desc">自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。</p>
         <span class="feature-tag">OpenCL</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">🌐</div>
-        <h3>Web 操作界面</h3>
-        <p>Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。</p>
+        <h3 data-i18n="features.card6_title">Web 操作界面</h3>
+        <p data-i18n="features.card6_desc">Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。</p>
         <span class="feature-tag">Flask</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">👥</div>
-        <h3>用户管理</h3>
-        <p>管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。</p>
+        <h3 data-i18n="features.card7_title">用户管理</h3>
+        <p data-i18n="features.card7_desc">管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。</p>
         <span class="feature-tag">RBAC</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">💾</div>
-        <h3>会话持久化</h3>
-        <p>关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。</p>
+        <h3 data-i18n="features.card8_title">会话持久化</h3>
+        <p data-i18n="features.card8_desc">关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。</p>
         <span class="feature-tag">Session</span>
       </div>
     </div>
@@ -1223,67 +1349,67 @@ body::before {
 <section class="section">
   <div class="container">
     <div class="section-label">Screenshots</div>
-    <h2 class="section-title">操作界面预览</h2>
-    <p class="section-subtitle">从登录到裁剪完成，全流程操作界面一览。</p>
+    <h2 class="section-title" data-i18n="screenshots.title">操作界面预览</h2>
+    <p class="section-subtitle" data-i18n="screenshots.subtitle">从登录到裁剪完成，全流程操作界面一览。</p>
 
     <div class="workflow-strip fade-in">
       <div class="workflow-step" onclick="openLightbox('images/01_login.png')">
-        <img src="images/01_login.png" alt="登录页面" loading="lazy">
-        <div class="label"><span class="num">01</span>登录页面</div>
+        <img src="images/01_login.png" alt="登录页面" loading="lazy" data-i18n-alt="screenshots.step1_alt">
+        <div class="label"><span class="num">01</span><span data-i18n="screenshots.step1">登录页面</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/02_main_interface.png')">
-        <img src="images/02_main_interface.png" alt="主界面" loading="lazy">
-        <div class="label"><span class="num">02</span>主界面 · 拖拽上传</div>
+        <img src="images/02_main_interface.png" alt="主界面" loading="lazy" data-i18n-alt="screenshots.step2_alt">
+        <div class="label"><span class="num">02</span><span data-i18n="screenshots.step2">主界面 · 拖拽上传</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/03_modal_import.png')">
-        <img src="images/03_modal_import.png" alt="导入确认" loading="lazy">
-        <div class="label"><span class="num">03</span>图片导入确认</div>
+        <img src="images/03_modal_import.png" alt="导入确认" loading="lazy" data-i18n-alt="screenshots.step3_alt">
+        <div class="label"><span class="num">03</span><span data-i18n="screenshots.step3">图片导入确认</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/04_processing.png')">
-        <img src="images/04_processing.png" alt="正在处理" loading="lazy">
-        <div class="label"><span class="num">04</span>自动裁剪处理中</div>
+        <img src="images/04_processing.png" alt="正在处理" loading="lazy" data-i18n-alt="screenshots.step4_alt">
+        <div class="label"><span class="num">04</span><span data-i18n="screenshots.step4">自动裁剪处理中</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/05_modal_done.png')">
-        <img src="images/05_modal_done.png" alt="裁剪完成" loading="lazy">
-        <div class="label"><span class="num">05</span>裁剪完成统计</div>
+        <img src="images/05_modal_done.png" alt="裁剪完成" loading="lazy" data-i18n-alt="screenshots.step5_alt">
+        <div class="label"><span class="num">05</span><span data-i18n="screenshots.step5">裁剪完成统计</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/06_results_view.png')">
-        <img src="images/06_results_view.png" alt="结果列表" loading="lazy">
-        <div class="label"><span class="num">06</span>裁剪结果列表</div>
+        <img src="images/06_results_view.png" alt="结果列表" loading="lazy" data-i18n-alt="screenshots.step6_alt">
+        <div class="label"><span class="num">06</span><span data-i18n="screenshots.step6">裁剪结果列表</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/07_cards_view.png')">
-        <img src="images/07_cards_view.png" alt="结果卡片" loading="lazy">
-        <div class="label"><span class="num">07</span>图片处理卡片</div>
+        <img src="images/07_cards_view.png" alt="结果卡片" loading="lazy" data-i18n-alt="screenshots.step7_alt">
+        <div class="label"><span class="num">07</span><span data-i18n="screenshots.step7">图片处理卡片</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/08_card_detail.png')">
-        <img src="images/08_card_detail.png" alt="卡片详情" loading="lazy">
-        <div class="label"><span class="num">08</span>单张详情预览</div>
+        <img src="images/08_card_detail.png" alt="卡片详情" loading="lazy" data-i18n-alt="screenshots.step8_alt">
+        <div class="label"><span class="num">08</span><span data-i18n="screenshots.step8">单张详情预览</span></div>
       </div>
       <div class="workflow-step" onclick="openLightbox('images/09_overview.png')">
-        <img src="images/09_overview.png" alt="总览" loading="lazy">
-        <div class="label"><span class="num">09</span>总体界面总览</div>
+        <img src="images/09_overview.png" alt="总览" loading="lazy" data-i18n-alt="screenshots.step9_alt">
+        <div class="label"><span class="num">09</span><span data-i18n="screenshots.step9">总体界面总览</span></div>
       </div>
     </div>
 
     <div class="screenshot-grid fade-in">
       <div class="screenshot-card" onclick="openLightbox('images/02_main_interface.png')">
-        <img src="images/02_main_interface.png" alt="主界面" loading="lazy">
+        <img src="images/02_main_interface.png" alt="主界面" loading="lazy" data-i18n-alt="screenshots.card1_alt">
         <div class="caption">
-          <span>登录后的主操作界面 — 拖拽或点击上传</span>
+          <span data-i18n="screenshots.card1_caption">登录后的主操作界面 — 拖拽或点击上传</span>
           <span class="step-badge">Step 1</span>
         </div>
       </div>
       <div class="screenshot-card" onclick="openLightbox('images/04_processing.png')">
-        <img src="images/04_processing.png" alt="处理中" loading="lazy">
+        <img src="images/04_processing.png" alt="处理中" loading="lazy" data-i18n-alt="screenshots.card2_alt">
         <div class="caption">
-          <span>自动裁剪进行中 — 进度条实时反馈</span>
+          <span data-i18n="screenshots.card2_caption">自动裁剪进行中 — 进度条实时反馈</span>
           <span class="step-badge">Step 2</span>
         </div>
       </div>
       <div class="screenshot-card" onclick="openLightbox('images/06_results_view.png')">
-        <img src="images/06_results_view.png" alt="裁剪结果" loading="lazy">
+        <img src="images/06_results_view.png" alt="裁剪结果" loading="lazy" data-i18n-alt="screenshots.card3_alt">
         <div class="caption">
-          <span>裁剪完成 — 结果列表与批量下载</span>
+          <span data-i18n="screenshots.card3_caption">裁剪完成 — 结果列表与批量下载</span>
           <span class="step-badge">Step 3</span>
         </div>
       </div>
@@ -1303,49 +1429,49 @@ body::before {
 <section class="section">
   <div class="container">
     <div class="section-label">Architecture</div>
-    <h2 class="section-title">系统架构</h2>
-    <p class="section-subtitle">四层架构设计：前端浏览器 → Flask API → 检测内核 → OpenCV 计算机视觉。</p>
+    <h2 class="section-title" data-i18n="arch.title">系统架构</h2>
+    <p class="section-subtitle" data-i18n="arch.subtitle">四层架构设计：前端浏览器 → Flask API → 检测内核 → OpenCV 计算机视觉。</p>
 
     <div class="arch-section fade-in">
       <div class="arch-flow">
-        <div class="arch-node highlight">📷 上传图片</div>
+        <div class="arch-node highlight" data-i18n="arch.upload">📷 上传图片</div>
         <div class="arch-arrow">→</div>
-        <div class="arch-node">🔐 认证<br><span class="sub">users.json</span></div>
+        <div class="arch-node">🔐 <span data-i18n="arch.auth">认证</span><br><span class="sub">users.json</span></div>
         <div class="arch-arrow">→</div>
-        <div class="arch-node highlight">📐 角点检测<br><span class="sub">Hough + 亮度</span></div>
+        <div class="arch-node highlight"><span data-i18n="arch.corner_det">📐 角点检测</span><br><span class="sub">Hough + 亮度</span></div>
         <div class="arch-arrow">→</div>
-        <div class="arch-node highlight">🔄 透视变换<br><span class="sub">WarpPerspective</span></div>
+        <div class="arch-node highlight"><span data-i18n="arch.transform">🔄 透视变换</span><br><span class="sub">WarpPerspective</span></div>
         <div class="arch-arrow">→</div>
-        <div class="arch-node">💾 输出下载</div>
+        <div class="arch-node" data-i18n="arch.download">💾 输出下载</div>
       </div>
 
       <div class="arch-algo">
         <div class="algo-item">
           <div class="algo-dot primary"></div>
           <div>
-            <div class="name">Hough 直线检测</div>
-            <div class="desc">主算法 · 找面板边框四条直线</div>
+            <div class="name" data-i18n="arch.algo1_name">Hough 直线检测</div>
+            <div class="desc" data-i18n="arch.algo1_desc">主算法 · 找面板边框四条直线</div>
           </div>
         </div>
         <div class="algo-item">
           <div class="algo-dot amber"></div>
           <div>
-            <div class="name">Otsu 亮度阈值</div>
-            <div class="desc">备用 · Hough 失败时自动降级</div>
+            <div class="name" data-i18n="arch.algo2_name">Otsu 亮度阈值</div>
+            <div class="desc" data-i18n="arch.algo2_desc">备用 · Hough 失败时自动降级</div>
           </div>
         </div>
         <div class="algo-item">
           <div class="algo-dot cyan"></div>
           <div>
-            <div class="name">fitLine 精确化</div>
-            <div class="desc">后处理 · 亚像素级精确拟合</div>
+            <div class="name" data-i18n="arch.algo3_name">fitLine 精确化</div>
+            <div class="desc" data-i18n="arch.algo3_desc">后处理 · 亚像素级精确拟合</div>
           </div>
         </div>
         <div class="algo-item">
           <div class="algo-dot green"></div>
           <div>
-            <div class="name">学习偏差叠加</div>
-            <div class="desc">≥3 条修正记录自动生效</div>
+            <div class="name" data-i18n="arch.algo4_name">学习偏差叠加</div>
+            <div class="desc" data-i18n="arch.algo4_desc">≥3 条修正记录自动生效</div>
           </div>
         </div>
       </div>
@@ -1359,32 +1485,29 @@ body::before {
 <section class="section">
   <div class="container">
     <div class="section-label">Showcase</div>
-    <h2 class="section-title">处理效果展示</h2>
-    <p class="section-subtitle">真实 EL 检测图像的裁剪效果对比，支持普通拍摄与无人机拍摄两种模式。</p>
+    <h2 class="section-title" data-i18n="showcase.title">处理效果展示</h2>
+    <p class="section-subtitle" data-i18n="showcase.subtitle">真实 EL 检测图像的裁剪效果对比，支持普通拍摄与无人机拍摄两种模式。</p>
 
     <div class="showcase-grid fade-in">
       <div class="showcase-card">
-        <div class="showcase-before-after">
-          <img src="images/normal_original.jpg" alt="原始EL照片" loading="lazy">
-          <img src="images/06_results_view.png" alt="裁剪结果" loading="lazy">
-        </div>
+        <img src="images/normal_original.jpg" alt="普通模式裁剪结果" loading="lazy" data-i18n-alt="showcase.card1_result_alt" style="width:100%;display:block">
         <div class="body">
-          <h3>普通模式裁剪</h3>
-          <p>单块太阳能电池板的 EL 检测照片，自动检测四个角点，通过透视变换矫正为规整矩形。支持外扩比例调节。</p>
-          <span class="tag">普通拍摄</span>
+          <h3 data-i18n="showcase.card1_title">普通模式裁剪</h3>
+          <p data-i18n="showcase.card1_desc">单块太阳能电池板的 EL 检测照片，自动检测四个角点，通过透视变换矫正为规整矩形。支持外扩比例调节。</p>
+          <span class="tag" data-i18n="showcase.card1_tag">普通拍摄</span>
         </div>
       </div>
 
       <div class="showcase-card">
         <div class="showcase-before-after" style="display:grid;grid-template-columns:repeat(3,1fr)">
-          <img src="images/drone_left.jpg" alt="左面板" loading="lazy">
-          <img src="images/drone_center.jpg" alt="中面板" loading="lazy">
-          <img src="images/drone_right.jpg" alt="右面板" loading="lazy">
+          <img src="images/drone_left.jpg" alt="左面板" loading="lazy" data-i18n-alt="showcase.card2_left_alt">
+          <img src="images/drone_center.jpg" alt="中面板" loading="lazy" data-i18n-alt="showcase.card2_center_alt">
+          <img src="images/drone_right.jpg" alt="右面板" loading="lazy" data-i18n-alt="showcase.card2_right_alt">
         </div>
         <div class="body">
-          <h3>无人机模式裁剪</h3>
-          <p>一张无人机拍摄的 EL 照片包含三块并排面板，自动拆分为左、中、右独立输出，统一尺寸，跳过不完整面板。</p>
-          <span class="tag">无人机拍摄</span>
+          <h3 data-i18n="showcase.card2_title">无人机模式裁剪</h3>
+          <p data-i18n="showcase.card2_desc">一张无人机拍摄的 EL 照片包含三块并排面板，自动拆分为左、中、右独立输出，统一尺寸，跳过不完整面板。</p>
+          <span class="tag" data-i18n="showcase.card2_tag">无人机拍摄</span>
         </div>
       </div>
     </div>
@@ -1397,39 +1520,39 @@ body::before {
 <section class="section">
   <div class="container">
     <div class="section-label">Technology</div>
-    <h2 class="section-title">技术栈</h2>
-    <p class="section-subtitle">轻量化技术选型，无需复杂环境配置即可运行。</p>
+    <h2 class="section-title" data-i18n="tech.title">技术栈</h2>
+    <p class="section-subtitle" data-i18n="tech.subtitle">轻量化技术选型，无需复杂环境配置即可运行。</p>
 
     <div class="tech-grid fade-in">
       <div class="tech-card">
         <div class="icon">🐍</div>
         <div class="name">Python 3.8</div>
-        <div class="desc">嵌入式运行时</div>
+        <div class="desc" data-i18n="tech.python">嵌入式运行时</div>
       </div>
       <div class="tech-card">
         <div class="icon">🌶️</div>
         <div class="name">Flask</div>
-        <div class="desc">Web 框架</div>
+        <div class="desc" data-i18n="tech.flask">Web 框架</div>
       </div>
       <div class="tech-card">
         <div class="icon">👁️</div>
         <div class="name">OpenCV 4.x</div>
-        <div class="desc">计算机视觉</div>
+        <div class="desc" data-i18n="tech.opencv">计算机视觉</div>
       </div>
       <div class="tech-card">
         <div class="icon">🔢</div>
         <div class="name">NumPy</div>
-        <div class="desc">数值计算</div>
+        <div class="desc" data-i18n="tech.numpy">数值计算</div>
       </div>
       <div class="tech-card">
         <div class="icon">⚡</div>
         <div class="name">OpenCL</div>
-        <div class="desc">GPU 加速</div>
+        <div class="desc" data-i18n="tech.opencl">GPU 加速</div>
       </div>
       <div class="tech-card">
         <div class="icon">🌐</div>
         <div class="name">HTML / JS</div>
-        <div class="desc">单页前端</div>
+        <div class="desc" data-i18n="tech.htmljs">单页前端</div>
       </div>
     </div>
   </div>
@@ -1441,47 +1564,47 @@ body::before {
 <section class="section">
   <div class="container">
     <div class="section-label">Getting Started</div>
-    <h2 class="section-title">使用教程</h2>
-    <p class="section-subtitle">三步启动服务，浏览器访问即可开始裁剪。</p>
+    <h2 class="section-title" data-i18n="usage.title">使用教程</h2>
+    <p class="section-subtitle" data-i18n="usage.subtitle">三步启动服务，浏览器访问即可开始裁剪。</p>
 
     <div class="steps fade-in">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-content">
-          <h3>下载 Python 环境</h3>
-          <p>右键 <code>1_download_python.bat</code> → 以管理员身份运行，自动下载嵌入式 Python 到 <code>runtime/</code> 目录。</p>
+          <h3 data-i18n="usage.step1_title">下载 Python 环境</h3>
+          <p data-i18n="usage.step1_desc">右键 <code>1_download_python.bat</code> → 以管理员身份运行，自动下载嵌入式 Python 到 <code>runtime/</code> 目录。</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-content">
-          <h3>安装依赖库</h3>
-          <p>右键 <code>2_install_libraries.bat</code> → 以管理员身份运行，自动安装 numpy、opencv-python、flask。</p>
+          <h3 data-i18n="usage.step2_title">安装依赖库</h3>
+          <p data-i18n="usage.step2_desc">右键 <code>2_install_libraries.bat</code> → 以管理员身份运行，自动安装 numpy、opencv-python、flask。</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-content">
-          <h3>启动服务</h3>
-          <p>右键 <code>3_start_tool.bat</code> → 以管理员身份运行。浏览器将自动打开操作界面。</p>
+          <h3 data-i18n="usage.step3_title">启动服务</h3>
+          <p data-i18n="usage.step3_desc">右键 <code>3_start_tool.bat</code> → 以管理员身份运行。浏览器将自动打开操作界面。</p>
         </div>
       </div>
     </div>
 
     <div class="login-box fade-in">
       <div>
-        <h3>默认管理员账号</h3>
-        <p>首次启动自动创建，登录后可在用户管理中修改密码或创建普通用户。</p>
+        <h3 data-i18n="usage.login_title">默认管理员账号</h3>
+        <p data-i18n="usage.login_desc">首次启动自动创建，登录后可在用户管理中修改密码或创建普通用户。</p>
       </div>
       <table class="login-table">
         <thead>
-          <tr><th>用户名</th><th>密码</th><th>角色</th></tr>
+          <tr><th data-i18n="usage.table_user">用户名</th><th data-i18n="usage.table_pass">密码</th><th data-i18n="usage.table_role">角色</th></tr>
         </thead>
         <tbody>
           <tr>
             <td><code>admin</code></td>
             <td><code>hjjc</code></td>
-            <td><span class="role-badge">管理员</span></td>
+            <td><span class="role-badge" data-i18n="usage.role_admin">管理员</span></td>
           </tr>
         </tbody>
       </table>
@@ -1492,18 +1615,201 @@ body::before {
 <!-- Footer -->
 <footer class="footer">
   <div class="container">
-    <p>华矩EL裁剪工具 v1.1 — 基于 MIT 许可证开源</p>
+    <p data-i18n="footer.license">华矩EL裁剪工具 v1.1 — 基于 MIT 许可证开源</p>
     <p style="margin-top:8px;font-size:13px;color:var(--text-muted)">
-      局域网访问 <code style="font-family:'JetBrains Mono',monospace;color:var(--text-secondary)">http://192.168.3.119:15789</code>
+      <span data-i18n="footer.access">局域网访问</span> <code style="font-family:'JetBrains Mono',monospace;color:var(--text-secondary)">http://192.168.3.119:15789</code>
     </p>
   </div>
 </footer>
 
 <!-- Back to Top -->
-<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部" data-i18n-alt="back_to_top">↑</button>
 
 <script>
-// Intersection Observer for fade-in
+// ===== Translation Map =====
+const translations = {
+  'page_title': {
+    zh: '华矩EL裁剪工具 — 太阳能电池板EL检测图像自动裁剪',
+    en: 'HuaJu EL Cropping Tool — Solar Panel EL Image Auto-Crop'
+  },
+  'logo_alt': { zh: '华矩EL测试仪', en: 'HuaJu EL Tester' },
+  'back_to_top': { zh: '回到顶部', en: 'Back to Top' },
+  'nav.features': { zh: '功能特性', en: 'Features' },
+  'nav.screenshots': { zh: '界面截图', en: 'Screenshots' },
+  'nav.architecture': { zh: '架构', en: 'Architecture' },
+  'nav.showcase': { zh: '效果展示', en: 'Showcase' },
+  'nav.tech': { zh: '技术栈', en: 'Tech Stack' },
+  'nav.usage': { zh: '使用教程', en: 'Usage' },
+  'nav.open_tool': { zh: '打开工具 →', en: 'Open Tool →' },
+  'hero.badge': { zh: 'v1.1 — 生产就绪', en: 'v1.1 — Production Ready' },
+  'hero.title1': { zh: '太阳能电池板', en: 'Solar Panel' },
+  'hero.title2': { zh: 'EL 检测图像', en: 'EL Inspection Image' },
+  'hero.title3': { zh: '自动透视裁剪', en: 'Auto Perspective Crop' },
+  'hero.desc': { zh: '基于计算机视觉的智能裁剪工具。自动检测电致发光（EL）照片中电池面板的四个角点，通过透视变换矫正为规整矩形。支持普通拍摄和无人机拍摄两种模式。', en: 'An intelligent cropping tool based on computer vision. Automatically detects the four corners of solar panels in EL photos, correcting them into regular rectangles via perspective transform. Supports both standard and drone photography modes.' },
+  'hero.quick_start': { zh: '快速开始', en: 'Quick Start' },
+  'hero.learn_more': { zh: '了解更多', en: 'Learn More' },
+  'hero.service_at': { zh: '— 服务运行在 192.168.3.119:15789', en: '— Service at 192.168.3.119:15789' },
+  'stats.imgs_per_min': { zh: '张 / 分钟 <span style="color:var(--text-muted)">(GPU)</span>', en: 'imgs / min <span style="color:var(--text-muted)">(GPU)</span>' },
+  'stats.success_rate': { zh: '自动检测成功率', en: 'Auto-Detection Success Rate' },
+  'stats.alg_cascade': { zh: '检测算法级联', en: 'Detection Algorithm Cascade' },
+  'stats.kernel_ver': { zh: '检测内核版本', en: 'Detection Kernel Version' },
+  'features.title': { zh: '核心功能特性', en: 'Core Features' },
+  'features.subtitle': { zh: '从图像预处理到透视变换矫正，全自动完成 EL 检测图像的裁剪工作。', en: 'From image preprocessing to perspective correction, fully automated EL inspection image cropping.' },
+  'features.card1_title': { zh: '自动角点检测', en: 'Auto Corner Detection' },
+  'features.card1_desc': { zh: '基于 Hough 直线检测 + 亮度阈值双算法，精准定位面板边框。检测失败时自动降级到备用算法，鲁棒性高。', en: 'Dual-algorithm approach using Hough line detection + brightness thresholding. Automatically falls back when detection fails for high robustness.' },
+  'features.card2_title': { zh: '透视变换矫正', en: 'Perspective Correction' },
+  'features.card2_desc': { zh: '将倾斜拍摄的面板通过透视变换矫正为标准矩形，支持水平/垂直外扩比例独立调节，保留完整面板内容。', en: 'Corrects tilted panels into standard rectangles via perspective transform. Independent horizontal/vertical expansion ratio adjustment.' },
+  'features.card3_title': { zh: '无人机模式', en: 'Drone Mode' },
+  'features.card3_desc': { zh: '一张包含多个面板的无人机 EL 照片自动裁出左、中、右最多 3 块独立面板，自适应面板数量，自动跳过不完整面板。', en: 'Automatically crops up to 3 panels (left, center, right) from a single drone EL photo. Auto-adapts to panel count, skips incomplete panels.' },
+  'features.card4_title': { zh: '学习系统', en: 'Learning System' },
+  'features.card4_desc': { zh: '记录用户手动修正的角点位置，积累 ≥3 条后自动叠加偏差优化后续检测。越用越准，适应不同拍摄环境。', en: 'Records user manual corrections. After ≥3 records, automatically applies deviation offsets to improve future detection. Gets smarter over time.' },
+  'features.card5_title': { zh: 'GPU 硬件加速', en: 'GPU Acceleration' },
+  'features.card5_desc': { zh: '自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。', en: 'Auto-detects and uses OpenCL for GPU acceleration. 300 images in 30-90s (GPU) vs 3-5 min (CPU).' },
+  'features.card6_title': { zh: 'Web 操作界面', en: 'Web Interface' },
+  'features.card6_desc': { zh: 'Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。', en: 'Flask-powered web interface accessible from any device on the LAN. Drag-and-drop upload with real-time preview.' },
+  'features.card7_title': { zh: '用户管理', en: 'User Management' },
+  'features.card7_desc': { zh: '管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。', en: 'Admin/user two-level access control. Admins can create users and change passwords. Default: admin / hjjc.' },
+  'features.card8_title': { zh: '会话持久化', en: 'Session Persistence' },
+  'features.card8_desc': { zh: '关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。', en: 'Auto-resumes last session after browser close. No work is lost. Supports batch multi-threaded processing.' },
+  'screenshots.title': { zh: '操作界面预览', en: 'Interface Preview' },
+  'screenshots.subtitle': { zh: '从登录到裁剪完成，全流程操作界面一览。', en: 'From login to cropping complete — a full workflow overview.' },
+  'screenshots.step1': { zh: '登录页面', en: 'Login Page' },
+  'screenshots.step1_alt': { zh: '登录页面', en: 'Login Page' },
+  'screenshots.step2': { zh: '主界面 · 拖拽上传', en: 'Main · Drag & Drop' },
+  'screenshots.step2_alt': { zh: '主界面', en: 'Main Interface' },
+  'screenshots.step3': { zh: '图片导入确认', en: 'Import Confirmation' },
+  'screenshots.step3_alt': { zh: '导入确认', en: 'Import Confirmation' },
+  'screenshots.step4': { zh: '自动裁剪处理中', en: 'Processing' },
+  'screenshots.step4_alt': { zh: '正在处理', en: 'Processing' },
+  'screenshots.step5': { zh: '裁剪完成统计', en: 'Completion Stats' },
+  'screenshots.step5_alt': { zh: '裁剪完成', en: 'Cropping Complete' },
+  'screenshots.step6': { zh: '裁剪结果列表', en: 'Results List' },
+  'screenshots.step6_alt': { zh: '结果列表', en: 'Results List' },
+  'screenshots.step7': { zh: '图片处理卡片', en: 'Image Cards' },
+  'screenshots.step7_alt': { zh: '结果卡片', en: 'Result Cards' },
+  'screenshots.step8': { zh: '单张详情预览', en: 'Detail Preview' },
+  'screenshots.step8_alt': { zh: '卡片详情', en: 'Card Details' },
+  'screenshots.step9': { zh: '总体界面总览', en: 'Overview' },
+  'screenshots.step9_alt': { zh: '总览', en: 'Overview' },
+  'screenshots.card1_caption': { zh: '登录后的主操作界面 — 拖拽或点击上传', en: 'Main interface — drag & drop or click to upload' },
+  'screenshots.card1_alt': { zh: '主界面', en: 'Main Interface' },
+  'screenshots.card2_caption': { zh: '自动裁剪进行中 — 进度条实时反馈', en: 'Auto-cropping in progress — real-time progress bar' },
+  'screenshots.card2_alt': { zh: '处理中', en: 'Processing' },
+  'screenshots.card3_caption': { zh: '裁剪完成 — 结果列表与批量下载', en: 'Cropping complete — results list & batch download' },
+  'screenshots.card3_alt': { zh: '裁剪结果', en: 'Cropping Results' },
+  'arch.title': { zh: '系统架构', en: 'System Architecture' },
+  'arch.subtitle': { zh: '四层架构设计：前端浏览器 → Flask API → 检测内核 → OpenCV 计算机视觉。', en: 'Four-layer architecture: Browser → Flask API → Detection Kernel → OpenCV.' },
+  'arch.upload': { zh: '📷 上传图片', en: '📷 Upload Image' },
+  'arch.auth': { zh: '认证', en: 'Auth' },
+  'arch.corner_det': { zh: '📐 角点检测', en: '📐 Corner Detection' },
+  'arch.transform': { zh: '🔄 透视变换', en: '🔄 Perspective Transform' },
+  'arch.download': { zh: '💾 输出下载', en: '💾 Download Output' },
+  'arch.algo1_name': { zh: 'Hough 直线检测', en: 'Hough Line Detection' },
+  'arch.algo1_desc': { zh: '主算法 · 找面板边框四条直线', en: 'Primary · Find 4 panel edges' },
+  'arch.algo2_name': { zh: 'Otsu 亮度阈值', en: 'Otsu Thresholding' },
+  'arch.algo2_desc': { zh: '备用 · Hough 失败时自动降级', en: 'Fallback · Auto-downgrade from Hough' },
+  'arch.algo3_name': { zh: 'fitLine 精确化', en: 'fitLine Refinement' },
+  'arch.algo3_desc': { zh: '后处理 · 亚像素级精确拟合', en: 'Post-process · Sub-pixel fitting' },
+  'arch.algo4_name': { zh: '学习偏差叠加', en: 'Learning Offset' },
+  'arch.algo4_desc': { zh: '≥3 条修正记录自动生效', en: 'Auto-activates after ≥3 corrections' },
+  'showcase.title': { zh: '处理效果展示', en: 'Processing Showcase' },
+  'showcase.subtitle': { zh: '真实 EL 检测图像的裁剪效果对比，支持普通拍摄与无人机拍摄两种模式。', en: 'Real EL inspection image cropping results. Supports both standard and drone photography modes.' },
+  'showcase.card1_title': { zh: '普通模式裁剪', en: 'Standard Mode Crop' },
+  'showcase.card1_desc': { zh: '单块太阳能电池板的 EL 检测照片，自动检测四个角点，通过透视变换矫正为规整矩形。支持外扩比例调节。', en: 'Single solar panel EL detection photo. Auto corner detection, perspective correction. Supports expansion ratio adjustment.' },
+  'showcase.card1_tag': { zh: '普通拍摄', en: 'Standard Shot' },
+  'showcase.card1_img_alt': { zh: '原始EL照片', en: 'Original EL Photo' },
+  'showcase.card1_result_alt': { zh: '裁剪结果', en: 'Cropped Result' },
+  'showcase.card2_title': { zh: '无人机模式裁剪', en: 'Drone Mode Crop' },
+  'showcase.card2_desc': { zh: '一张无人机拍摄的 EL 照片包含三块并排面板，自动拆分为左、中、右独立输出，统一尺寸，跳过不完整面板。', en: 'A single drone EL photo with 3 panels. Auto-splits into left, center, right outputs. Uniform sizing, skips incomplete panels.' },
+  'showcase.card2_tag': { zh: '无人机拍摄', en: 'Drone Shot' },
+  'showcase.card2_left_alt': { zh: '左面板', en: 'Left Panel' },
+  'showcase.card2_center_alt': { zh: '中面板', en: 'Center Panel' },
+  'showcase.card2_right_alt': { zh: '右面板', en: 'Right Panel' },
+  'tech.title': { zh: '技术栈', en: 'Technology Stack' },
+  'tech.subtitle': { zh: '轻量化技术选型，无需复杂环境配置即可运行。', en: 'Lightweight tech stack. Ready to run without complex setup.' },
+  'tech.python': { zh: '嵌入式运行时', en: 'Embedded Runtime' },
+  'tech.flask': { zh: 'Web 框架', en: 'Web Framework' },
+  'tech.opencv': { zh: '计算机视觉', en: 'Computer Vision' },
+  'tech.numpy': { zh: '数值计算', en: 'Numerical Computing' },
+  'tech.opencl': { zh: 'GPU 加速', en: 'GPU Acceleration' },
+  'tech.htmljs': { zh: '单页前端', en: 'Single-Page Frontend' },
+  'usage.title': { zh: '使用教程', en: 'Getting Started' },
+  'usage.subtitle': { zh: '三步启动服务，浏览器访问即可开始裁剪。', en: 'Three steps to start. Open in browser and begin cropping.' },
+  'usage.step1_title': { zh: '下载 Python 环境', en: 'Download Python Runtime' },
+  'usage.step1_desc': { zh: '右键 <code>1_download_python.bat</code> → 以管理员身份运行，自动下载嵌入式 Python 到 <code>runtime/</code> 目录。', en: 'Right-click <code>1_download_python.bat</code> → Run as admin. Auto-downloads embedded Python to <code>runtime/</code>.' },
+  'usage.step2_title': { zh: '安装依赖库', en: 'Install Dependencies' },
+  'usage.step2_desc': { zh: '右键 <code>2_install_libraries.bat</code> → 以管理员身份运行，自动安装 numpy、opencv-python、flask。', en: 'Right-click <code>2_install_libraries.bat</code> → Run as admin. Installs numpy, opencv-python, flask.' },
+  'usage.step3_title': { zh: '启动服务', en: 'Start Service' },
+  'usage.step3_desc': { zh: '右键 <code>3_start_tool.bat</code> → 以管理员身份运行。浏览器将自动打开操作界面。', en: 'Right-click <code>3_start_tool.bat</code> → Run as admin. Browser opens automatically.' },
+  'usage.login_title': { zh: '默认管理员账号', en: 'Default Admin Account' },
+  'usage.login_desc': { zh: '首次启动自动创建，登录后可在用户管理中修改密码或创建普通用户。', en: 'Auto-created on first launch. Change password or create users in User Management.' },
+  'usage.table_user': { zh: '用户名', en: 'Username' },
+  'usage.table_pass': { zh: '密码', en: 'Password' },
+  'usage.table_role': { zh: '角色', en: 'Role' },
+  'usage.role_admin': { zh: '管理员', en: 'Admin' },
+  'footer.license': { zh: '华矩EL裁剪工具 v1.1 — 基于 MIT 许可证开源', en: 'HuaJu EL Cropping Tool v1.1 — Open source under MIT License' },
+  'footer.access': { zh: '局域网访问', en: 'LAN Access' }
+};
+
+// ===== State =====
+let currentLang = localStorage.getItem('el-lang') || 'zh';
+let currentTheme = localStorage.getItem('el-theme') || 'day';
+
+// ===== Language Switching =====
+function applyLanguage(lang) {
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[key] && translations[key][lang]) {
+      el.innerHTML = translations[key][lang];
+    }
+  });
+  // Update all data-i18n-alt elements
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    const key = el.getAttribute('data-i18n-alt');
+    if (translations[key] && translations[key][lang]) {
+      el.setAttribute('alt', translations[key][lang]);
+    }
+  });
+  // Update lang toggle button text
+  const langBtn = document.getElementById('langToggle');
+  if (langBtn) {
+    langBtn.textContent = lang === 'zh' ? 'EN' : '中';
+    langBtn.title = lang === 'zh' ? 'Switch to English' : '切换到中文';
+  }
+  currentLang = lang;
+  localStorage.setItem('el-lang', lang);
+}
+
+function toggleLanguage() {
+  const newLang = currentLang === 'zh' ? 'en' : 'zh';
+  applyLanguage(newLang);
+}
+
+// ===== Theme Switching =====
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.title = theme === 'day' ? '切换到黑夜模式' : '切换到白天模式';
+    const icon = themeBtn.querySelector('svg');
+    if (icon) {
+      icon.innerHTML = theme === 'day'
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+  }
+  currentTheme = theme;
+  localStorage.setItem('el-theme', theme);
+}
+
+function toggleTheme() {
+  const newTheme = currentTheme === 'day' ? 'night' : 'day';
+  applyTheme(newTheme);
+}
+
+// ===== Intersection Observer for fade-in =====
 (function() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -1516,7 +1822,7 @@ body::before {
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 })();
 
-// Back to top button
+// ===== Back to top button =====
 (function() {
   const btn = document.getElementById('backTop');
   window.addEventListener('scroll', () => {
@@ -1524,7 +1830,7 @@ body::before {
   });
 })();
 
-// Lightbox for screenshots
+// ===== Lightbox for screenshots =====
 function openLightbox(src) {
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
@@ -1542,6 +1848,10 @@ function closeLightbox() {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
 });
+
+// ===== Initialize =====
+applyLanguage(currentLang);
+applyTheme(currentTheme);
 </script>
 </body>
 </html>
