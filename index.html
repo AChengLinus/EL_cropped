@@ -1185,6 +1185,46 @@ body::before {
   background: linear-gradient(90deg, transparent, var(--border), transparent);
   margin: 0;
 }
+/* ===== Confirm Modal ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+.modal-box h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.modal-box p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
 </style>
 </head>
 <body>
@@ -1203,7 +1243,6 @@ body::before {
       <li><a href="#screenshots" data-i18n="nav.screenshots">界面截图</a></li>
       <li><a href="#architecture" data-i18n="nav.architecture">架构</a></li>
       <li><a href="#showcase" data-i18n="nav.showcase">效果展示</a></li>
-      <li><a href="#tech" data-i18n="nav.tech">技术栈</a></li>
       <li><a href="#requirements" data-i18n="nav.requirements">系统要求</a></li>
       <li><a href="#usage" data-i18n="nav.usage">使用教程</a></li>
       <li><a href="#faq" data-i18n="nav.faq">常见问题</a></li>
@@ -1213,7 +1252,7 @@ body::before {
         </button>
         <button class="toggle-btn" id="langToggle" onclick="toggleLanguage()" title="Switch Language">EN</button>
       </li>
-      <li><a href="http://192.168.3.119:15789" class="nav-gh-btn" target="_blank" data-i18n="nav.open_tool">打开工具 →</a></li>
+      <li><a href="javascript:void(0)" class="nav-gh-btn" onclick="confirmNav('http://192.168.3.119:15789')" data-i18n="nav.open_tool">打开工具 →</a></li>
     </ul>
   </div>
 </nav>
@@ -1236,7 +1275,7 @@ body::before {
         基于计算机视觉的智能裁剪工具。专为 EL（电致发光）成像系统在暗室环境拍摄的 LED 发光面板照片设计，自动检测面板四个角点，通过透视变换矫正为规整矩形。支持批量多线程处理、手动角点编辑校正、学习偏差自动优化。提供普通拍摄和无人机拍摄两种模式。
       </p>
       <div class="hero-actions">
-        <a href="http://192.168.3.119:15789" class="btn-primary" target="_blank">
+        <a href="javascript:void(0)" class="btn-primary" onclick="confirmNav('http://192.168.3.119:15789')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span data-i18n="hero.quick_start">快速开始</span>
         </a>
@@ -1477,6 +1516,42 @@ body::before {
         </div>
       </div>
     </div>
+
+    <!-- Tech Stack (merged into Architecture) -->
+    <h3 style="font-size:20px;font-weight:600;margin-top:48px;margin-bottom:24px" data-i18n="tech.title">技术栈</h3>
+    <p class="section-subtitle" data-i18n="tech.subtitle" style="margin-bottom:24px">轻量化技术选型，无需复杂环境配置即可运行。</p>
+    <div class="tech-grid fade-in">
+      <div class="tech-card">
+        <div class="icon">🐍</div>
+        <div class="name">Python 3.8</div>
+        <div class="desc" data-i18n="tech.python">嵌入式运行时</div>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🌶️</div>
+        <div class="name">Flask</div>
+        <div class="desc" data-i18n="tech.flask">Web 框架</div>
+      </div>
+      <div class="tech-card">
+        <div class="icon">👁️</div>
+        <div class="name">OpenCV 4.x</div>
+        <div class="desc" data-i18n="tech.opencv">计算机视觉</div>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🔢</div>
+        <div class="name">NumPy</div>
+        <div class="desc" data-i18n="tech.numpy">数值计算</div>
+      </div>
+      <div class="tech-card">
+        <div class="icon">⚡</div>
+        <div class="name">OpenCL</div>
+        <div class="desc" data-i18n="tech.opencl">GPU 加速</div>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🌐</div>
+        <div class="name">HTML / JS</div>
+        <div class="desc" data-i18n="tech.htmljs">单页前端</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1515,49 +1590,6 @@ body::before {
   </div>
 </section>
 
-<hr class="section-divider" id="tech">
-
-<!-- Tech Stack -->
-<section class="section">
-  <div class="container">
-    <div class="section-label">Technology</div>
-    <h2 class="section-title" data-i18n="tech.title">技术栈</h2>
-    <p class="section-subtitle" data-i18n="tech.subtitle">轻量化技术选型，无需复杂环境配置即可运行。</p>
-
-    <div class="tech-grid fade-in">
-      <div class="tech-card">
-        <div class="icon">🐍</div>
-        <div class="name">Python 3.8</div>
-        <div class="desc" data-i18n="tech.python">嵌入式运行时</div>
-      </div>
-      <div class="tech-card">
-        <div class="icon">🌶️</div>
-        <div class="name">Flask</div>
-        <div class="desc" data-i18n="tech.flask">Web 框架</div>
-      </div>
-      <div class="tech-card">
-        <div class="icon">👁️</div>
-        <div class="name">OpenCV 4.x</div>
-        <div class="desc" data-i18n="tech.opencv">计算机视觉</div>
-      </div>
-      <div class="tech-card">
-        <div class="icon">🔢</div>
-        <div class="name">NumPy</div>
-        <div class="desc" data-i18n="tech.numpy">数值计算</div>
-      </div>
-      <div class="tech-card">
-        <div class="icon">⚡</div>
-        <div class="name">OpenCL</div>
-        <div class="desc" data-i18n="tech.opencl">GPU 加速</div>
-      </div>
-      <div class="tech-card">
-        <div class="icon">🌐</div>
-        <div class="name">HTML / JS</div>
-        <div class="desc" data-i18n="tech.htmljs">单页前端</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <hr class="section-divider" id="requirements">
 
@@ -2206,6 +2238,23 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 
+// ===== Confirm Navigation Modal =====
+let pendingUrl = '';
+function confirmNav(url) {
+  pendingUrl = url;
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeConfirmModal() {
+  document.getElementById('confirmModal').classList.remove('open');
+  pendingUrl = '';
+}
+function doNav() {
+  if (pendingUrl) {
+    window.open(pendingUrl, '_blank');
+  }
+  closeConfirmModal();
+}
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
 });
@@ -2248,5 +2297,17 @@ document.addEventListener('keydown', (e) => {
 applyLanguage(currentLang);
 applyTheme(currentTheme);
 </script>
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirmModal" onclick="if(event.target===this)closeConfirmModal()">
+    <div class="modal-box">
+      <h3>提示</h3>
+      <p>此为局域网内使用（192.168.3.119），如外网（远程/公网）请使用本地离线版本。<br><br>确定要跳转到工具页面吗？</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeConfirmModal()" style="padding:10px 24px;font-size:14px">取消</button>
+        <button class="btn-primary" onclick="doNav()" style="padding:10px 24px;font-size:14px">确定</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
