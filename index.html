@@ -1204,7 +1204,9 @@ body::before {
       <li><a href="#architecture" data-i18n="nav.architecture">架构</a></li>
       <li><a href="#showcase" data-i18n="nav.showcase">效果展示</a></li>
       <li><a href="#tech" data-i18n="nav.tech">技术栈</a></li>
+      <li><a href="#requirements" data-i18n="nav.requirements">系统要求</a></li>
       <li><a href="#usage" data-i18n="nav.usage">使用教程</a></li>
+      <li><a href="#faq" data-i18n="nav.faq">常见问题</a></li>
       <li style="display:flex;gap:6px">
         <button class="toggle-btn theme-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换主题">
           <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -1231,8 +1233,7 @@ body::before {
         <span data-i18n="hero.title3">自动透视裁剪</span>
       </h1>
       <p data-i18n="hero.desc">
-        基于计算机视觉的智能裁剪工具。自动检测电致发光（EL）照片中电池面板的四个角点，
-        通过透视变换矫正为规整矩形。支持普通拍摄和无人机拍摄两种模式。
+        基于计算机视觉的智能裁剪工具。专为 EL（电致发光）成像系统在暗室环境拍摄的 LED 发光面板照片设计，自动检测面板四个角点，通过透视变换矫正为规整矩形。支持批量多线程处理、手动角点编辑校正、学习偏差自动优化。提供普通拍摄和无人机拍摄两种模式。
       </p>
       <div class="hero-actions">
         <a href="http://192.168.3.119:15789" class="btn-primary" target="_blank">
@@ -1558,6 +1559,44 @@ body::before {
   </div>
 </section>
 
+<hr class="section-divider" id="requirements">
+
+<!-- System Requirements -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Requirements</div>
+    <h2 class="section-title" data-i18n="req.title">系统要求（离线部署）</h2>
+    <p class="section-subtitle" data-i18n="req.subtitle">轻量级本地部署，无需云端依赖，保障数据安全。</p>
+
+    <div class="features-grid fade-in" style="margin-top:48px">
+      <div class="feature-card">
+        <div class="feature-icon">🖥️</div>
+        <h3 data-i18n="req.os_title">操作系统</h3>
+        <p data-i18n="req.os_desc">Windows 10 / Windows 11（64位）。首次安装需要联网下载依赖，日常使用无需网络连接。</p>
+        <span class="feature-tag">Windows</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💾</div>
+        <h3 data-i18n="req.disk_title">磁盘与内存</h3>
+        <p data-i18n="req.disk_desc">内存 8 GB 以上（推荐）。安装包约 50 MB，处理图片存储空间视数量而定。</p>
+        <span class="feature-tag">8 GB+ RAM</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3 data-i18n="req.browser_title">浏览器</h3>
+        <p data-i18n="req.browser_desc">Chrome / Edge / Firefox（推荐 Chrome）。工具基于 Web 界面操作，无需安装额外客户端。</p>
+        <span class="feature-tag">Web UI</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 data-i18n="req.gpu_title">GPU 加速（可选）</h3>
+        <p data-i18n="req.gpu_desc">支持 OpenCL 的显卡可大幅提升处理速度。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。</p>
+        <span class="feature-tag">OpenCL</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <hr class="section-divider" id="usage">
 
 <!-- Usage -->
@@ -1565,33 +1604,159 @@ body::before {
   <div class="container">
     <div class="section-label">Getting Started</div>
     <h2 class="section-title" data-i18n="usage.title">使用教程</h2>
-    <p class="section-subtitle" data-i18n="usage.subtitle">三步启动服务，浏览器访问即可开始裁剪。</p>
+    <p class="section-subtitle" data-i18n="usage.subtitle">从首次安装到批量裁剪，完整操作指南。</p>
 
+    <!-- File Description -->
+    <h3 style="font-size:20px;font-weight:600;margin-top:48px;margin-bottom:16px" data-i18n="usage.files_title">程序文件说明</h3>
+    <div style="overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--border)">
+      <table class="login-table fade-in" style="margin:0">
+        <thead>
+          <tr><th data-i18n="usage.table_file">文件名</th><th data-i18n="usage.table_purpose">用途</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>1_download_python.bat</code></td><td data-i18n="usage.files_python">下载独立 Python 运行环境（约 25 MB）</td></tr>
+          <tr><td><code>2_install_libraries.bat</code></td><td data-i18n="usage.files_libs">安装 NumPy、Flask、OpenCV 等依赖库</td></tr>
+          <tr><td><code>3_start_tool.bat</code></td><td data-i18n="usage.files_start">启动后端服务并自动打开浏览器（日常使用只需此步）</td></tr>
+          <tr><td><code>launcher.exe</code></td><td data-i18n="usage.files_launcher">图形界面启动器，集服务启停、用户管理、运行日志于一体</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Installation Steps -->
+    <h3 style="font-size:20px;font-weight:600;margin-top:48px;margin-bottom:16px" data-i18n="usage.install_title">首次安装步骤</h3>
     <div class="steps fade-in">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-content">
           <h3 data-i18n="usage.step1_title">下载 Python 环境</h3>
-          <p data-i18n="usage.step1_desc">右键 <code>1_download_python.bat</code> → 以管理员身份运行，自动下载嵌入式 Python 到 <code>runtime/</code> 目录。</p>
+          <p data-i18n="usage.step1_desc">双击运行 <code>1_download_python.bat</code>，等待下载完成（约 1～3 分钟）。自动下载嵌入式 Python 到 <code>runtime/</code> 目录。</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-content">
           <h3 data-i18n="usage.step2_title">安装依赖库</h3>
-          <p data-i18n="usage.step2_desc">右键 <code>2_install_libraries.bat</code> → 以管理员身份运行，自动安装 numpy、opencv-python、flask。</p>
+          <p data-i18n="usage.step2_desc">双击运行 <code>2_install_libraries.bat</code>，等待依赖安装完成（约 2～5 分钟）。窗口提示"所有依赖安装完成"后可关闭。安装过程中请勿关闭黑色命令行窗口。</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-content">
           <h3 data-i18n="usage.step3_title">启动服务</h3>
-          <p data-i18n="usage.step3_desc">右键 <code>3_start_tool.bat</code> → 以管理员身份运行。浏览器将自动打开操作界面。</p>
+          <p data-i18n="usage.step3_desc">双击运行 <code>3_start_tool.bat</code>，浏览器将自动打开工具界面（约 1～2 秒）。若未自动打开，请手动访问 <code>http://localhost:15789</code>。</p>
         </div>
       </div>
     </div>
 
-    <div class="login-box fade-in">
+    <!-- Server vs Local -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px" class="fade-in">
+      <div class="feature-card" style="margin:0">
+        <div class="feature-icon">💻</div>
+        <h3 data-i18n="usage.local_title">本地离线版</h3>
+        <p data-i18n="usage.local_desc">安装在本机，首次安装后每次使用只需双击 <code>3_start_tool.bat</code>。浏览器自动打开 <code>http://127.0.0.1:15789</code>。</p>
+      </div>
+      <div class="feature-card" style="margin:0">
+        <div class="feature-icon">🌐</div>
+        <h3 data-i18n="usage.server_title">服务器版</h3>
+        <p data-i18n="usage.server_desc">部署在局域网服务器上，其他电脑无需安装任何软件，打开浏览器访问服务器 IP:15789 即可使用。</p>
+      </div>
+    </div>
+
+    <!-- Batch Workflow -->
+    <h3 style="font-size:20px;font-weight:600;margin-top:48px;margin-bottom:16px" data-i18n="usage.batch_title">批量裁剪操作流程</h3>
+    <div class="steps fade-in">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.batch1_title">导入图片</h3>
+          <p data-i18n="usage.batch1_desc">点击"导入图片"按钮或将图片文件拖拽到页面。支持 JPG、PNG 等常见格式，单次可导入数百张。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.batch2_title">弹窗确认</h3>
+          <p data-i18n="usage.batch2_desc">导入后弹出确认框显示图片数量，点击"立即开始裁剪"按钮启动自动处理。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.batch3_title">自动处理</h3>
+          <p data-i18n="usage.batch3_desc">系统自动逐张检测面板位置并完成透视变换，每张约 0.5～3 秒，多张并发处理。右上角显示 GPU/CPU 运算状态。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.batch4_title">查看结果</h3>
+          <p data-i18n="usage.batch4_desc">处理完成的卡片显示绿色"已完成"标签和结果预览。失败或超时的图片显示对应状态，可在失败队列中处理。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.batch5_title">完成统计</h3>
+          <p data-i18n="usage.batch5_desc">全部处理完毕后弹出汇总框，显示成功/失败/超时数量，可点击"下载全部已完成图片（ZIP）"打包下载。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.batch6_title">导出结果</h3>
+          <p data-i18n="usage.batch6_desc">导出图片为 JPEG 格式（质量系数 95），文件名与原始导入文件名保持一致。三种导出方式：全部打包、单张下载、失败原图打包。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manual Editor -->
+    <h3 style="font-size:20px;font-weight:600;margin-top:48px;margin-bottom:16px" data-i18n="usage.editor_title">手动裁剪编辑器</h3>
+    <div class="steps fade-in">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.editor1_title">打开方式</h3>
+          <p data-i18n="usage.editor1_desc">自动检测结果不满意时，点击卡片上的"打开编辑器"按钮（失败图片）或蓝色"✎ 重新裁剪"按钮（已完成图片）打开底部编辑器面板。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.editor2_title">拖动角点</h3>
+          <p data-i18n="usage.editor2_desc">原图上显示四个橙色圆点（左上、右上、右下、左下），鼠标移至圆点附近按住左键拖动至准确位置后松开。触摸屏设备也可用手指拖动。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3 data-i18n="usage.editor3_title">应用裁剪</h3>
+          <p data-i18n="usage.editor3_desc">调整完毕后点击"应用裁剪"查看结果，右侧实时预览裁剪效果。满意后图片状态更新为"已完成"。也可点击"重新自动检测"丢弃手动调整。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Failure Queue -->
+    <h3 style="font-size:20px;font-weight:600;margin-top:48px;margin-bottom:16px" data-i18n="usage.fail_title">失败队列处理</h3>
+    <div class="features-grid fade-in" style="margin-top:20px">
+      <div class="feature-card" style="margin:0">
+        <div class="feature-icon">⚠️</div>
+        <h3 data-i18n="usage.fail1_title">检测失败</h3>
+        <p data-i18n="usage.fail1_desc">图片过暗、面板面积占比过小、强反光遮挡、分辨率过低。可通过手动编辑器拖动角点校正，或调整外扩黑边比例后重新自动检测。</p>
+      </div>
+      <div class="feature-card" style="margin:0">
+        <div class="feature-icon">⏱️</div>
+        <h3 data-i18n="usage.fail2_title">超时（>120s）</h3>
+        <p data-i18n="usage.fail2_desc">单张图片过大（>50 MB）或系统内存不足。可减少单批导入数量或升级硬件配置后重试。</p>
+      </div>
+      <div class="feature-card" style="margin:0">
+        <div class="feature-icon">⬛</div>
+        <h3 data-i18n="usage.fail3_title">结果全黑</h3>
+        <p data-i18n="usage.fail3_desc">相机曝光不足，面板亮度低于检测阈值。建议确保原图曝光充足（面板亮度与背景对比度比值 > 5），或手动裁剪。</p>
+      </div>
+    </div>
+
+    <!-- Login Info -->
+    <div class="login-box fade-in" style="margin-top:48px">
       <div>
         <h3 data-i18n="usage.login_title">默认管理员账号</h3>
         <p data-i18n="usage.login_desc">首次启动自动创建，登录后可在用户管理中修改密码或创建普通用户。</p>
@@ -1608,6 +1773,113 @@ body::before {
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider" id="faq">
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title" data-i18n="faq.title">常见问题</h2>
+    <p class="section-subtitle" data-i18n="faq.subtitle">使用过程中最常遇到的问题及解决方法。</p>
+
+    <div style="margin-top:48px;display:flex;flex-direction:column;gap:12px" class="fade-in">
+      <div class="feature-card" style="cursor:pointer" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='none'?'block':'none'">
+        <h3 style="display:flex;align-items:center;gap:8px;font-size:15px">
+          <span style="color:var(--accent)">Q1</span>
+          <span data-i18n="faq.q1">浏览器未自动打开或显示"无法访问此网站"</span>
+        </h3>
+        <div class="faq-answer" style="display:none;margin-top:12px;font-size:14px;color:var(--text-secondary);line-height:1.8" data-i18n="faq.a1">
+          <p>检查命令行窗口是否仍在运行（不能关闭）；手动在地址栏输入 <code>http://localhost:15789</code>；如端口占用，关闭已有的命令行窗口后重新运行 <code>3_start_tool.bat</code>。</p>
+        </div>
+      </div>
+      <div class="feature-card" style="cursor:pointer" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='none'?'block':'none'">
+        <h3 style="display:flex;align-items:center;gap:8px;font-size:15px">
+          <span style="color:var(--accent)">Q2</span>
+          <span data-i18n="faq.q2">安装依赖时提示网络错误</span>
+        </h3>
+        <div class="faq-answer" style="display:none;margin-top:12px;font-size:14px;color:var(--text-secondary);line-height:1.8" data-i18n="faq.a2">
+          <p>确认电脑已连接互联网；若使用企业代理，临时关闭代理后重试；关闭安全软件的网络拦截功能。</p>
+        </div>
+      </div>
+      <div class="feature-card" style="cursor:pointer" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='none'?'block':'none'">
+        <h3 style="display:flex;align-items:center;gap:8px;font-size:15px">
+          <span style="color:var(--accent)">Q3</span>
+          <span data-i18n="faq.q3">裁剪结果全黑或角点不准</span>
+        </h3>
+        <div class="faq-answer" style="display:none;margin-top:12px;font-size:14px;color:var(--text-secondary);line-height:1.8" data-i18n="faq.a3">
+          <p>使用手动编辑器将四个角点拖动到面板准确位置；减小"外扩黑边"比例至 2%～3% 后点击"重新自动检测"；确认原图曝光充足（面板亮度与背景对比度比值建议 > 5）。</p>
+        </div>
+      </div>
+      <div class="feature-card" style="cursor:pointer" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='none'?'block':'none'">
+        <h3 style="display:flex;align-items:center;gap:8px;font-size:15px">
+          <span style="color:var(--accent)">Q4</span>
+          <span data-i18n="faq.q4">批量处理速度慢</span>
+        </h3>
+        <div class="faq-answer" style="display:none;margin-top:12px;font-size:14px;color:var(--text-secondary);line-height:1.8" data-i18n="faq.a4">
+          <p>右上角显示"CPU"表示未启用 GPU 加速，属正常情况；安装支持 OpenCL 的显卡驱动后重启服务可启用加速；建议单批导入不超过 200 张。</p>
+        </div>
+      </div>
+      <div class="feature-card" style="cursor:pointer" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='none'?'block':'none'">
+        <h3 style="display:flex;align-items:center;gap:8px;font-size:15px">
+          <span style="color:var(--accent)">Q5</span>
+          <span data-i18n="faq.q5">外扩黑边如何设置？</span>
+        </h3>
+        <div class="faq-answer" style="display:none;margin-top:12px;font-size:14px;color:var(--text-secondary);line-height:1.8" data-i18n="faq.a5">
+          <p>顶部工具栏"外扩黑边"滑块控制裁剪后四周保留的黑边比例（0~20%）。默认 5%，推荐 3%～8%。面板边缘检测不足时可适当增大，反之减小。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider" id="params">
+
+<!-- Technical Parameters -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Specifications</div>
+    <h2 class="section-title" data-i18n="params.title">技术参数</h2>
+    <p class="section-subtitle" data-i18n="params.subtitle">检测算法与服务配置的详细参数。</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px" class="fade-in">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:15px" data-i18n="params.algo_title">自动检测算法</div>
+        <div style="overflow-x:auto">
+          <table class="login-table" style="margin:0">
+            <tbody>
+              <tr><td style="font-weight:500" data-i18n="params.preproc">预处理尺寸</td><td style="color:var(--text-secondary)">最长边缩放至 1200 px</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.threshold">阈值策略</td><td style="color:var(--text-secondary)">Otsu 动态阈值 + 像素亮度百分位</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.method">主检测方法</td><td style="color:var(--text-secondary)">Hough 直线检测（面板边框四条线）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.fallback">备用方法</td><td style="color:var(--text-secondary)">Otsu 亮度阈值法（自动降级）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.refine">精确化</td><td style="color:var(--text-secondary)">fitLine 亚像素级拟合</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.learning">学习系统</td><td style="color:var(--text-secondary)">偏差叠加（≥3 条记录自动生效）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.pad_default">外扩黑边默认</td><td style="color:var(--text-secondary)">5%（范围 0～20%）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.timeout">超时限制</td><td style="color:var(--text-secondary)">120 秒/张</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-weight:600;font-size:15px" data-i18n="params.service_title">服务配置</div>
+        <div style="overflow-x:auto">
+          <table class="login-table" style="margin:0">
+            <tbody>
+              <tr><td style="font-weight:500" data-i18n="params.port">服务端口</td><td style="color:var(--text-secondary)">15789</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.max_size">最大文件大小</td><td style="color:var(--text-secondary)">100 MB/张</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.threads">并发线程数</td><td style="color:var(--text-secondary)">CPU 核心数（自动检测）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.output">输出格式</td><td style="color:var(--text-secondary)">JPEG，质量系数 95</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.python">Python 版本</td><td style="color:var(--text-secondary)">3.8.10（内置 Embeddable 版）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.deps">主要依赖</td><td style="color:var(--text-secondary)">OpenCV 4.x · NumPy 1.24.4 · Flask 3.0.3</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.gpu_accel">GPU 加速</td><td style="color:var(--text-secondary)">OpenCL（通过 cv2.UMat 自动启用）</td></tr>
+              <tr><td style="font-weight:500" data-i18n="params.drone">无人机模式</td><td style="color:var(--text-secondary)">自适应 1~3 面板检测</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1640,12 +1912,14 @@ const translations = {
   'nav.showcase': { zh: '效果展示', en: 'Showcase' },
   'nav.tech': { zh: '技术栈', en: 'Tech Stack' },
   'nav.usage': { zh: '使用教程', en: 'Usage' },
+  'nav.requirements': { zh: '系统要求', en: 'Requirements' },
+  'nav.faq': { zh: '常见问题', en: 'FAQ' },
   'nav.open_tool': { zh: '打开工具 →', en: 'Open Tool →' },
   'hero.badge': { zh: 'v1.1 — 生产就绪', en: 'v1.1 — Production Ready' },
   'hero.title1': { zh: '太阳能电池板', en: 'Solar Panel' },
   'hero.title2': { zh: 'EL 检测图像', en: 'EL Inspection Image' },
   'hero.title3': { zh: '自动透视裁剪', en: 'Auto Perspective Crop' },
-  'hero.desc': { zh: '基于计算机视觉的智能裁剪工具。自动检测电致发光（EL）照片中电池面板的四个角点，通过透视变换矫正为规整矩形。支持普通拍摄和无人机拍摄两种模式。', en: 'An intelligent cropping tool based on computer vision. Automatically detects the four corners of solar panels in EL photos, correcting them into regular rectangles via perspective transform. Supports both standard and drone photography modes.' },
+  'hero.desc': { zh: '基于计算机视觉的智能裁剪工具。专为 EL（电致发光）成像系统在暗室环境拍摄的 LED 发光面板照片设计，自动检测面板四个角点，通过透视变换矫正为规整矩形。支持批量多线程处理、手动角点编辑校正、学习偏差自动优化。提供普通拍摄和无人机拍摄两种模式。', en: 'An intelligent cropping tool based on computer vision. Designed for LED panel EL (electroluminescence) images captured in darkroom environments. Auto-detects the four corners of panels and corrects them into regular rectangles via perspective transform. Supports batch multi-threaded processing, manual corner editing, and automatic learning-based bias optimization. Both standard and drone photography modes.' },
   'hero.quick_start': { zh: '快速开始', en: 'Quick Start' },
   'hero.learn_more': { zh: '了解更多', en: 'Learn More' },
   'hero.service_at': { zh: '— 服务运行在 192.168.3.119:15789', en: '— Service at 192.168.3.119:15789' },
@@ -1734,7 +2008,62 @@ const translations = {
   'tech.opencl': { zh: 'GPU 加速', en: 'GPU Acceleration' },
   'tech.htmljs': { zh: '单页前端', en: 'Single-Page Frontend' },
   'usage.title': { zh: '使用教程', en: 'Getting Started' },
-  'usage.subtitle': { zh: '三步启动服务，浏览器访问即可开始裁剪。', en: 'Three steps to start. Open in browser and begin cropping.' },
+  'usage.subtitle': { zh: '从首次安装到批量裁剪，完整操作指南。', en: 'Complete guide from first-time setup to batch cropping.' },
+  'usage.files_title': { zh: '程序文件说明', en: 'Program Files' },
+  'usage.table_file': { zh: '文件名', en: 'File' },
+  'usage.table_purpose': { zh: '用途', en: 'Purpose' },
+  'usage.files_python': { zh: '下载独立 Python 运行环境（约 25 MB）', en: 'Download standalone Python runtime (~25 MB)' },
+  'usage.files_libs': { zh: '安装 NumPy、Flask、OpenCV 等依赖库', en: 'Install NumPy, Flask, OpenCV dependencies' },
+  'usage.files_start': { zh: '启动后端服务并自动打开浏览器（日常使用只需此步）', en: 'Start backend service & open browser (daily use)' },
+  'usage.files_launcher': { zh: '图形界面启动器，集服务启停、用户管理、运行日志于一体', en: 'GUI launcher with service control, user management & logs' },
+  'usage.install_title': { zh: '首次安装步骤', en: 'First-Time Installation' },
+  'usage.step1_title': { zh: '下载 Python 环境', en: 'Download Python Runtime' },
+  'usage.step1_desc': { zh: '双击运行 <code>1_download_python.bat</code>，等待下载完成（约 1～3 分钟）。自动下载嵌入式 Python 到 <code>runtime/</code> 目录。', en: 'Double-click <code>1_download_python.bat</code>. Wait 1-3 min for download.' },
+  'usage.step2_title': { zh: '安装依赖库', en: 'Install Dependencies' },
+  'usage.step2_desc': { zh: '双击运行 <code>2_install_libraries.bat</code>，等待依赖安装完成（约 2～5 分钟）。窗口提示"所有依赖安装完成"后可关闭。安装过程中请勿关闭黑色命令行窗口。', en: 'Double-click <code>2_install_libraries.bat</code>. Wait 2-5 min for installation. Do not close the terminal window during setup.' },
+  'usage.step3_title': { zh: '启动服务', en: 'Start Service' },
+  'usage.step3_desc': { zh: '双击运行 <code>3_start_tool.bat</code>，浏览器将自动打开工具界面（约 1～2 秒）。若未自动打开，请手动访问 <code>http://localhost:15789</code>。', en: 'Double-click <code>3_start_tool.bat</code>. Browser opens automatically (1-2s). If not, visit <code>http://localhost:15789</code>.' },
+  'usage.local_title': { zh: '本地离线版', en: 'Local Offline Version' },
+  'usage.local_desc': { zh: '安装在本机，首次安装后每次使用只需双击 <code>3_start_tool.bat</code>。浏览器自动打开 <code>http://127.0.0.1:15789</code>。', en: 'Installed locally. After first-time setup, just double-click <code>3_start_tool.bat</code> to start.' },
+  'usage.server_title': { zh: '服务器版', en: 'Server Version' },
+  'usage.server_desc': { zh: '部署在局域网服务器上，其他电脑无需安装任何软件，打开浏览器访问服务器 IP:15789 即可使用。', en: 'Deployed on LAN server. Other computers need no installation — just open browser to server IP:15789.' },
+  'usage.batch_title': { zh: '批量裁剪操作流程', en: 'Batch Cropping Workflow' },
+  'usage.batch1_title': { zh: '导入图片', en: 'Import Images' },
+  'usage.batch1_desc': { zh: '点击"导入图片"按钮或将图片文件拖拽到页面。支持 JPG、PNG 等常见格式，单次可导入数百张。', en: 'Click "Import" or drag & drop images. Supports JPG, PNG, etc. Hundreds at a time.' },
+  'usage.batch2_title': { zh: '弹窗确认', en: 'Confirm Import' },
+  'usage.batch2_desc': { zh: '导入后弹出确认框显示图片数量，点击"立即开始裁剪"按钮启动自动处理。', en: 'Confirmation dialog shows image count. Click "Start Cropping" to begin.' },
+  'usage.batch3_title': { zh: '自动处理', en: 'Auto Processing' },
+  'usage.batch3_desc': { zh: '系统自动逐张检测面板位置并完成透视变换，每张约 0.5～3 秒，多张并发处理。右上角显示 GPU/CPU 运算状态。', en: 'System auto-detects panel positions and performs perspective correction. 0.5-3s per image, multi-threaded.' },
+  'usage.batch4_title': { zh: '查看结果', en: 'View Results' },
+  'usage.batch4_desc': { zh: '处理完成的卡片显示绿色"已完成"标签和结果预览。失败或超时的图片显示对应状态，可在失败队列中处理。', en: 'Completed cards show green "Done" tag and preview. Failed/timeout images go to the failure queue.' },
+  'usage.batch5_title': { zh: '完成统计', en: 'Completion Stats' },
+  'usage.batch5_desc': { zh: '全部处理完毕后弹出汇总框，显示成功/失败/超时数量，可点击"下载全部已完成图片（ZIP）"打包下载。', en: 'Summary dialog shows success/fail/timeout counts. Click "Download All (ZIP)" to export.' },
+  'usage.batch6_title': { zh: '导出结果', en: 'Export Results' },
+  'usage.batch6_desc': { zh: '导出图片为 JPEG 格式（质量系数 95），文件名与原始导入文件名保持一致。三种导出方式：全部打包、单张下载、失败原图打包。', en: 'Exported as JPEG (quality 95). Filenames preserved. Three export methods: batch ZIP, single download, failed originals ZIP.' },
+  'usage.editor_title': { zh: '手动裁剪编辑器', en: 'Manual Cropping Editor' },
+  'usage.editor1_title': { zh: '打开方式', en: 'How to Open' },
+  'usage.editor1_desc': { zh: '自动检测结果不满意时，点击卡片上的"打开编辑器"按钮（失败图片）或蓝色"✎ 重新裁剪"按钮（已完成图片）打开底部编辑器面板。', en: 'Click "Open Editor" on failed cards or the blue "Re-crop" button on completed cards to open the bottom editor panel.' },
+  'usage.editor2_title': { zh: '拖动角点', en: 'Drag Corners' },
+  'usage.editor2_desc': { zh: '原图上显示四个橙色圆点（左上、右上、右下、左下），鼠标移至圆点附近按住左键拖动至准确位置后松开。触摸屏设备也可用手指拖动。', en: 'Four orange dots show panel corners. Click and drag to adjust. Touchscreen compatible.' },
+  'usage.editor3_title': { zh: '应用裁剪', en: 'Apply Crop' },
+  'usage.editor3_desc': { zh: '调整完毕后点击"应用裁剪"查看结果，右侧实时预览裁剪效果。满意后图片状态更新为"已完成"。也可点击"重新自动检测"丢弃手动调整。', en: 'Click "Apply Crop" to preview. Right panel shows real-time result. Click "Re-detect" to discard manual adjustments.' },
+  'usage.fail_title': { zh: '失败队列处理', en: 'Failure Queue' },
+  'usage.fail1_title': { zh: '检测失败', en: 'Detection Failed' },
+  'usage.fail1_desc': { zh: '图片过暗、面板面积占比过小、强反光遮挡、分辨率过低。可通过手动编辑器拖动角点校正，或调整外扩黑边比例后重新自动检测。', en: 'Image too dark, panel too small, strong glare, or low resolution. Use manual editor or adjust black edge padding and re-detect.' },
+  'usage.fail2_title': { zh: '超时（>120s）', en: 'Timeout (>120s)' },
+  'usage.fail2_desc': { zh: '单张图片过大（>50 MB）或系统内存不足。可减少单批导入数量或升级硬件配置后重试。', en: 'Image too large (>50 MB) or insufficient memory. Reduce batch size or upgrade hardware.' },
+  'usage.fail3_title': { zh: '结果全黑', en: 'All-Black Result' },
+  'usage.fail3_desc': { zh: '相机曝光不足，面板亮度低于检测阈值。建议确保原图曝光充足（面板亮度与背景对比度比值 > 5），或手动裁剪。', en: 'Underexposed image. Ensure panel brightness/background contrast ratio > 5, or use manual cropping.' },
+  'req.title': { zh: '系统要求（离线部署）', en: 'System Requirements (Offline)' },
+  'req.subtitle': { zh: '轻量级本地部署，无需云端依赖，保障数据安全。', en: 'Lightweight local deployment. No cloud dependency required.' },
+  'req.os_title': { zh: '操作系统', en: 'Operating System' },
+  'req.os_desc': { zh: 'Windows 10 / Windows 11（64位）。首次安装需要联网下载依赖，日常使用无需网络连接。', en: 'Windows 10 / Windows 11 (64-bit). Internet required for first-time setup only.' },
+  'req.disk_title': { zh: '磁盘与内存', en: 'Disk & Memory' },
+  'req.disk_desc': { zh: '内存 8 GB 以上（推荐）。安装包约 50 MB，处理图片存储空间视数量而定。', en: '8 GB+ RAM recommended. Installer ~50 MB. Storage depends on image volume.' },
+  'req.browser_title': { zh: '浏览器', en: 'Browser' },
+  'req.browser_desc': { zh: 'Chrome / Edge / Firefox（推荐 Chrome）。工具基于 Web 界面操作，无需安装额外客户端。', en: 'Chrome / Edge / Firefox (Chrome recommended). Web-based UI, no extra client needed.' },
+  'req.gpu_title': { zh: 'GPU 加速（可选）', en: 'GPU Acceleration (Optional)' },
+  'req.gpu_desc': { zh: '支持 OpenCL 的显卡可大幅提升处理速度。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。', en: 'OpenCL-compatible GPU greatly improves speed. 300 images in 30-90s (GPU) vs 3-5 min (CPU).' },
   'usage.step1_title': { zh: '下载 Python 环境', en: 'Download Python Runtime' },
   'usage.step1_desc': { zh: '右键 <code>1_download_python.bat</code> → 以管理员身份运行，自动下载嵌入式 Python 到 <code>runtime/</code> 目录。', en: 'Right-click <code>1_download_python.bat</code> → Run as admin. Auto-downloads embedded Python to <code>runtime/</code>.' },
   'usage.step2_title': { zh: '安装依赖库', en: 'Install Dependencies' },
@@ -1747,6 +2076,38 @@ const translations = {
   'usage.table_pass': { zh: '密码', en: 'Password' },
   'usage.table_role': { zh: '角色', en: 'Role' },
   'usage.role_admin': { zh: '管理员', en: 'Admin' },
+  'faq.title': { zh: '常见问题', en: 'FAQ' },
+  'faq.subtitle': { zh: '使用过程中最常遇到的问题及解决方法。', en: 'Most common issues and their solutions.' },
+  'faq.q1': { zh: '浏览器未自动打开或显示"无法访问此网站"', en: 'Browser won\'t open or says "Cannot access this site"' },
+  'faq.a1': { zh: '检查命令行窗口是否仍在运行（不能关闭）；手动在地址栏输入 http://localhost:15789；如端口占用，关闭已有的命令行窗口后重新运行 3_start_tool.bat。', en: 'Check the terminal window is still running. Manually visit http://localhost:15789. If port is occupied, close existing window and restart.' },
+  'faq.q2': { zh: '安装依赖时提示网络错误', en: 'Network error during dependency installation' },
+  'faq.a2': { zh: '确认电脑已连接互联网；若使用企业代理，临时关闭代理后重试；关闭安全软件的网络拦截功能。', en: 'Check internet connection. Disable corporate proxy temporarily. Disable network blocking in security software.' },
+  'faq.q3': { zh: '裁剪结果全黑或角点不准', en: 'Cropped result is all black or corners are inaccurate' },
+  'faq.a3': { zh: '使用手动编辑器将四个角点拖动到面板准确位置；减小"外扩黑边"比例至 2%～3% 后点击"重新自动检测"；确认原图曝光充足（面板亮度与背景对比度比值建议 > 5）。', en: 'Use the manual editor to drag corners to correct positions. Reduce black edge padding to 2-3% and re-detect. Ensure adequate exposure (brightness contrast ratio > 5).' },
+  'faq.q4': { zh: '批量处理速度慢', en: 'Batch processing is slow' },
+  'faq.a4': { zh: '右上角显示"CPU"表示未启用 GPU 加速，属正常情况；安装支持 OpenCL 的显卡驱动后重启服务可启用加速；建议单批导入不超过 200 张。', en: '"CPU" indicator means GPU acceleration is off. Install OpenCL-compatible GPU drivers and restart. Recommended max 200 images per batch.' },
+  'faq.q5': { zh: '外扩黑边如何设置？', en: 'How to set the black edge padding?' },
+  'faq.a5': { zh: '顶部工具栏"外扩黑边"滑块控制裁剪后四周保留的黑边比例（0~20%）。默认 5%，推荐 3%～8%。面板边缘检测不足时可适当增大，反之减小。', en: 'The "Edge Padding" slider in the top toolbar controls the black border ratio (0-20%). Default 5%, recommended 3-8%. Increase if panel edges are cut off.' },
+  'params.title': { zh: '技术参数', en: 'Technical Specifications' },
+  'params.subtitle': { zh: '检测算法与服务配置的详细参数。', en: 'Detailed parameters of detection algorithms and service configuration.' },
+  'params.algo_title': { zh: '自动检测算法', en: 'Detection Algorithm' },
+  'params.preproc': { zh: '预处理尺寸', en: 'Preprocessing Size' },
+  'params.threshold': { zh: '阈值策略', en: 'Threshold Strategy' },
+  'params.method': { zh: '主检测方法', en: 'Primary Method' },
+  'params.fallback': { zh: '备用方法', en: 'Fallback Method' },
+  'params.refine': { zh: '精确化', en: 'Refinement' },
+  'params.learning': { zh: '学习系统', en: 'Learning System' },
+  'params.pad_default': { zh: '外扩黑边默认', en: 'Default Edge Padding' },
+  'params.timeout': { zh: '超时限制', en: 'Timeout Limit' },
+  'params.service_title': { zh: '服务配置', en: 'Service Configuration' },
+  'params.port': { zh: '服务端口', en: 'Service Port' },
+  'params.max_size': { zh: '最大文件大小', en: 'Max File Size' },
+  'params.threads': { zh: '并发线程数', en: 'Concurrent Threads' },
+  'params.output': { zh: '输出格式', en: 'Output Format' },
+  'params.python': { zh: 'Python 版本', en: 'Python Version' },
+  'params.deps': { zh: '主要依赖', en: 'Dependencies' },
+  'params.gpu_accel': { zh: 'GPU 加速', en: 'GPU Acceleration' },
+  'params.drone': { zh: '无人机模式', en: 'Drone Mode' },
   'footer.license': { zh: '华矩EL裁剪工具 v1.1 — 基于 MIT 许可证开源', en: 'HuaJu EL Cropping Tool v1.1 — Open source under MIT License' },
   'footer.access': { zh: '局域网访问', en: 'LAN Access' }
 };
@@ -1848,6 +2209,40 @@ function closeLightbox() {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
 });
+
+// ===== Auto-detect Server IP =====
+(function() {
+  const oldIp = '192.168.3.119';
+  const host = window.location.hostname || '127.0.0.1';
+  // Replace IP in all text nodes
+  function replaceText(node) {
+    if (node.nodeType === 3) {
+      if (node.textContent.includes(oldIp)) {
+        node.textContent = node.textContent.split(oldIp).join(host);
+      }
+    } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+      // Check href/src attributes
+      if (node.href && node.href.includes(oldIp)) {
+        node.href = node.href.split(oldIp).join(host);
+      }
+      if (node.src && node.src.includes(oldIp)) {
+        node.src = node.src.split(oldIp).join(host);
+      }
+      node.childNodes.forEach(child => replaceText(child));
+    }
+  }
+  replaceText(document.body);
+  // Also fix translations map
+  for (const key in translations) {
+    for (const lang in translations[key]) {
+      if (translations[key][lang].includes(oldIp)) {
+        translations[key][lang] = translations[key][lang].split(oldIp).join(host);
+      }
+    }
+  }
+  // Re-apply current language after translation fix
+  applyLanguage(currentLang);
+})();
 
 // ===== Initialize =====
 applyLanguage(currentLang);
