@@ -1303,11 +1303,11 @@ body::before {
       <div class="stat-label" data-i18n="stats.imgs_per_min">张 / 分钟 <span style="color:var(--text-muted)">(GPU)</span></div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">99%</div>
+      <div class="stat-number">83%</div>
       <div class="stat-label" data-i18n="stats.success_rate">自动检测成功率</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">3</div>
+      <div class="stat-number">4</div>
       <div class="stat-label" data-i18n="stats.alg_cascade">检测算法级联</div>
     </div>
     <div class="stat-item">
@@ -1354,30 +1354,37 @@ body::before {
       </div>
 
       <div class="feature-card fade-in">
+        <div class="feature-icon">🤖</div>
+        <h3 data-i18n="features.card5_title">AI模型训练100万参数量</h3>
+        <p data-i18n="features.card5_desc">通过把往年的裁剪素材对AI模型进行推理训练，不断提升检测精度。</p>
+        <span class="feature-tag">AI模型</span>
+      </div>
+
+      <div class="feature-card fade-in">
         <div class="feature-icon">⚡</div>
-        <h3 data-i18n="features.card5_title">GPU 硬件加速</h3>
-        <p data-i18n="features.card5_desc">自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。</p>
+        <h3 data-i18n="features.card6_title">GPU 硬件加速</h3>
+        <p data-i18n="features.card6_desc">自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。</p>
         <span class="feature-tag">OpenCL</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">🌐</div>
-        <h3 data-i18n="features.card6_title">Web 操作界面</h3>
-        <p data-i18n="features.card6_desc">Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。</p>
+        <h3 data-i18n="features.card7_title">Web 操作界面</h3>
+        <p data-i18n="features.card7_desc">Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。</p>
         <span class="feature-tag">Flask</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">👥</div>
-        <h3 data-i18n="features.card7_title">用户管理</h3>
-        <p data-i18n="features.card7_desc">管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。</p>
+        <h3 data-i18n="features.card8_title">用户管理</h3>
+        <p data-i18n="features.card8_desc">管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。</p>
         <span class="feature-tag">RBAC</span>
       </div>
 
       <div class="feature-card fade-in">
         <div class="feature-icon">💾</div>
-        <h3 data-i18n="features.card8_title">会话持久化</h3>
-        <p data-i18n="features.card8_desc">关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。</p>
+        <h3 data-i18n="features.card9_title">会话持久化</h3>
+        <p data-i18n="features.card9_desc">关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。</p>
         <span class="feature-tag">Session</span>
       </div>
     </div>
@@ -1477,7 +1484,7 @@ body::before {
       <div class="arch-flow">
         <div class="arch-node highlight" data-i18n="arch.upload">📷 上传图片</div>
         <div class="arch-arrow">→</div>
-        <div class="arch-node">🔐 <span data-i18n="arch.auth">认证</span><br><span class="sub">users.json</span></div>
+        <div class="arch-node">🤖 <span data-i18n="arch.auth">AI模型识别</span><br><span class="sub">model.onnx</span></div>
         <div class="arch-arrow">→</div>
         <div class="arch-node highlight"><span data-i18n="arch.corner_det">📐 角点检测</span><br><span class="sub">Hough + 亮度</span></div>
         <div class="arch-arrow">→</div>
@@ -1538,9 +1545,9 @@ body::before {
         <div class="desc" data-i18n="tech.opencv">计算机视觉</div>
       </div>
       <div class="tech-card">
-        <div class="icon">🔢</div>
-        <div class="name">NumPy</div>
-        <div class="desc" data-i18n="tech.numpy">数值计算</div>
+        <div class="icon">🤖</div>
+        <div class="name">Model</div>
+        <div class="desc" data-i18n="tech.numpy">AI 模型</div>
       </div>
       <div class="tech-card">
         <div class="icon">⚡</div>
@@ -1970,14 +1977,16 @@ const translations = {
   'features.card3_desc': { zh: '一张包含多个面板的无人机 EL 照片自动裁出左、中、右最多 3 块独立面板，自适应面板数量，自动跳过不完整面板。', en: 'Automatically crops up to 3 panels (left, center, right) from a single drone EL photo. Auto-adapts to panel count, skips incomplete panels.' },
   'features.card4_title': { zh: '学习系统', en: 'Learning System' },
   'features.card4_desc': { zh: '记录用户手动修正的角点位置，积累 ≥3 条后自动叠加偏差优化后续检测。越用越准，适应不同拍摄环境。', en: 'Records user manual corrections. After ≥3 records, automatically applies deviation offsets to improve future detection. Gets smarter over time.' },
-  'features.card5_title': { zh: 'GPU 硬件加速', en: 'GPU Acceleration' },
-  'features.card5_desc': { zh: '自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。', en: 'Auto-detects and uses OpenCL for GPU acceleration. 300 images in 30-90s (GPU) vs 3-5 min (CPU).' },
-  'features.card6_title': { zh: 'Web 操作界面', en: 'Web Interface' },
-  'features.card6_desc': { zh: 'Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。', en: 'Flask-powered web interface accessible from any device on the LAN. Drag-and-drop upload with real-time preview.' },
-  'features.card7_title': { zh: '用户管理', en: 'User Management' },
-  'features.card7_desc': { zh: '管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。', en: 'Admin/user two-level access control. Admins can create users and change passwords. Default: admin / hjjc.' },
-  'features.card8_title': { zh: '会话持久化', en: 'Session Persistence' },
-  'features.card8_desc': { zh: '关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。', en: 'Auto-resumes last session after browser close. No work is lost. Supports batch multi-threaded processing.' },
+  'features.card5_title': { zh: 'AI模型训练', en: 'AI Model Training' },
+  'features.card5_desc': { zh: '通过把往年的裁剪素材对AI模型进行推理训练，不断提升检测精度。', en: 'Trains AI models using historical cropping data to continuously improve detection accuracy.' },
+  'features.card6_title': { zh: 'GPU 硬件加速', en: 'GPU Acceleration' },
+  'features.card6_desc': { zh: '自动检测并使用 OpenCL 加速图像处理。300 张图片 GPU 仅需 30~90 秒，CPU 模式 3~5 分钟。', en: 'Auto-detects and uses OpenCL for GPU acceleration. 300 images in 30-90s (GPU) vs 3-5 min (CPU).' },
+  'features.card7_title': { zh: 'Web 操作界面', en: 'Web Interface' },
+  'features.card7_desc': { zh: 'Flask 后端提供 Web 服务，局域网内任何设备均可访问。支持拖拽上传，实时预览裁剪效果。', en: 'Flask-powered web interface accessible from any device on the LAN. Drag-and-drop upload with real-time preview.' },
+  'features.card8_title': { zh: '用户管理', en: 'User Management' },
+  'features.card8_desc': { zh: '管理员/普通用户两级权限。管理员可创建用户、修改密码。默认账号 admin / hjjc。', en: 'Admin/user two-level access control. Admins can create users and change passwords. Default: admin / hjjc.' },
+  'features.card9_title': { zh: '会话持久化', en: 'Session Persistence' },
+  'features.card9_desc': { zh: '关闭浏览器后自动恢复上次处理进度，未完成的工作不会丢失。支持批量多线程处理。', en: 'Auto-resumes last session after browser close. No work is lost. Supports batch multi-threaded processing.' },
   'screenshots.title': { zh: '操作界面预览', en: 'Interface Preview' },
   'screenshots.subtitle': { zh: '从登录到裁剪完成，全流程操作界面一览。', en: 'From login to cropping complete — a full workflow overview.' },
   'screenshots.step1': { zh: '登录页面', en: 'Login Page' },
@@ -2007,7 +2016,7 @@ const translations = {
   'arch.title': { zh: '系统架构', en: 'System Architecture' },
   'arch.subtitle': { zh: '四层架构设计：前端浏览器 → Flask API → 检测内核 → OpenCV 计算机视觉。', en: 'Four-layer architecture: Browser → Flask API → Detection Kernel → OpenCV.' },
   'arch.upload': { zh: '📷 上传图片', en: '📷 Upload Image' },
-  'arch.auth': { zh: '认证', en: 'Auth' },
+  'arch.auth': { zh: '识别', en: 'Authentication' },
   'arch.corner_det': { zh: '📐 角点检测', en: '📐 Corner Detection' },
   'arch.transform': { zh: '🔄 透视变换', en: '🔄 Perspective Transform' },
   'arch.download': { zh: '💾 输出下载', en: '💾 Download Output' },
@@ -2037,7 +2046,7 @@ const translations = {
   'tech.python': { zh: '嵌入式运行时', en: 'Embedded Runtime' },
   'tech.flask': { zh: 'Web 框架', en: 'Web Framework' },
   'tech.opencv': { zh: '计算机视觉', en: 'Computer Vision' },
-  'tech.numpy': { zh: '数值计算', en: 'Numerical Computing' },
+  'tech.numpy': { zh: 'AI 模型', en: 'AI Model' },
   'tech.opencl': { zh: 'GPU 加速', en: 'GPU Acceleration' },
   'tech.htmljs': { zh: '单页前端', en: 'Single-Page Frontend' },
   'usage.title': { zh: '使用教程', en: 'Getting Started' },
