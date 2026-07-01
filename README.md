@@ -130,20 +130,14 @@ flowchart TB
 │   ├── drone_*.jpg
 │   └── normal_original.jpg
 │
-├── 华矩EL裁剪工具V1.1服务端/    # 📦 核心工具服务端
-│   ├── 1_download_python.bat   # 下载 Python 嵌入式环境
-│   ├── 2_install_libraries.bat # 安装依赖库
-│   ├── 3_start_tool.bat        # 启动服务
-│   ├── install_libs.py
-│   ├── users.json              # 用户账号数据
+├── 华矩EL裁剪工具(离线版)/      # 📦 离线版主程序
+│   ├── EL裁剪工具-离线版.exe    # 双击启动，自动打开浏览器
+│   ├── 使用建议.txt             # 使用说明
 │   ├── runtime/                # Python 运行时
 │   └── app/
 │       ├── app.py              # Flask 后端主程序
 │       ├── index.html          # 工具操作界面
-│       ├── batch_drone.py      # 无人机批量处理脚本
-│       ├── corrections.json    # 学习样本
-│       ├── corrections_drone.json
-│       └── sessions/           # 会话持久化
+│       └── tools/              # 工具模块
 └── README.md
 ```
 
@@ -151,50 +145,26 @@ flowchart TB
 
 ### 环境要求
 
-- Windows 7 / 10 / 11
-- 支持 GPU 加速（NVIDIA/AMD/Intel 显卡，可选）
-- 首次使用需联网下载约 90MB 依赖
+- Windows 10 / 11（64 位）
+- 无需安装 Python 或其他依赖，内置完整运行环境
 
 ### 安装与启动
 
-#### 第一步：下载 Python
+#### 第一步：下载离线版
 
-右键 **`1_download_python.bat`** → **以管理员身份运行**
+从下载链接获取 **`EL裁剪工具-离线版.exe`**（约 120 MB，含完整运行环境）。
 
-自动下载 Python 3.8.10 嵌入式环境到 `runtime/` 目录（约 8MB）。
+#### 第二步：启动工具
 
-#### 第二步：安装依赖库
+双击 **`EL裁剪工具-离线版.exe`**，浏览器将自动打开工具界面（约 2～5 秒）。
 
-右键 **`2_install_libraries.bat`** → **以管理员身份运行**
-
-自动安装 numpy、opencv-python、flask（约 80MB，耗时 3~8 分钟）。
-
-> 如遇下载失败，脚本会自动切换多种下载方式，请确保网络通畅。
-
-#### 第三步：启动工具
-
-右键 **`3_start_tool.bat`** → **以管理员身份运行**
-
-启动后自动打开浏览器进入操作界面。
-
-```
-本机访问：  http://127.0.0.1:15789
-局域网访问： http://192.168.3.119:15789
-```
-
-### 登录说明
-
-首次启动自动创建默认管理员账号：
-
-| 用户名 | 密码 | 角色 |
-|--------|------|------|
-| admin | hjjc | 管理员 |
+若未自动打开，请手动访问 `http://127.0.0.1:15789`。
 
 ### 操作流程
 
 1. **上传图片** — 点击上传或拖拽 EL 检测照片到网页
 2. **自动裁剪** — 系统自动检测面板角点并矫正
-3. **手动修正**（可选）— 拖拽橙色角点调整检测位置，保存修正以优化后续检测
+3. **手动修正**（可选）— 拖拽橙色角点调整检测位置
 4. **下载结果** — 保存裁剪后的面板图片
 
 ### 性能参考
@@ -213,18 +183,6 @@ flowchart TB
 | 硬件加速 | OpenCL（可选） |
 | 前端界面 | 纯 HTML / JavaScript |
 | 介绍页部署 | GitHub Pages + 自定义域名 |
-
-## 本地开发
-
-```bash
-# 手动安装依赖
-pip install numpy opencv-python flask
-
-# 启动服务
-python app/app.py
-```
-
-服务默认监听 `0.0.0.0:15789`。
 
 ## 许可证
 
