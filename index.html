@@ -1298,6 +1298,7 @@ body::before {
       <li><a href="#requirements" data-i18n="nav.requirements">系统要求</a></li>
       <li><a href="#usage" data-i18n="nav.usage">使用教程</a></li>
       <li><a href="#faq" data-i18n="nav.faq">常见问题</a></li>
+      <li><a href="marker.html" target="_blank" data-i18n="nav.marker">图片标记</a></li>
       <li style="display:flex;gap:6px">
         <button class="toggle-btn theme-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换主题">
           <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -1334,6 +1335,9 @@ body::before {
         <a href="#features" class="btn-secondary">
           <span data-i18n="hero.learn_more">了解更多</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </a>
+        <a href="marker.html" target="_blank" class="btn-secondary">
+          <span data-i18n="hero.marker">🎯 图片标记工具</span>
         </a>
       </div>
       <div class="terminal-line">
@@ -1984,6 +1988,7 @@ const translations = {
   'nav.requirements': { zh: '系统要求', en: 'Requirements' },
   'nav.faq': { zh: '常见问题', en: 'FAQ' },
   'nav.open_tool': { zh: '打开工具 →', en: 'Open Tool →' },
+  'nav.marker': { zh: '图片标记', en: 'Image Marker' },
   'hero.badge': { zh: 'v26.04.01 — 生产就绪', en: 'v26.04.01 — Production Ready' },
   'hero.title1': { zh: '太阳能电池板', en: 'Solar Panel' },
   'hero.title2': { zh: 'EL 检测图像', en: 'EL Inspection Image' },
@@ -1991,6 +1996,7 @@ const translations = {
   'hero.desc': { zh: '基于计算机视觉的智能裁剪工具。专为 EL（电致发光）成像系统在暗室环境拍摄的 LED 发光面板照片设计，自动检测面板四个角点，通过透视变换矫正为规整矩形。支持批量多线程处理、手动角点编辑校正、学习偏差自动优化。提供普通拍摄和无人机拍摄两种模式。', en: 'An intelligent cropping tool based on computer vision. Designed for LED panel EL (electroluminescence) images captured in darkroom environments. Auto-detects the four corners of panels and corrects them into regular rectangles via perspective transform. Supports batch multi-threaded processing, manual corner editing, and automatic learning-based bias optimization. Both standard and drone photography modes.' },
   'hero.quick_start': { zh: '快速开始', en: 'Quick Start' },
   'hero.learn_more': { zh: '了解更多', en: 'Learn More' },
+  'hero.marker': { zh: '🎯 图片标记工具', en: '🎯 Image Marker Tool' },
   'hero.service_at': { zh: '— 服务运行在 el.acheng9616.com:15789', en: '— Service at el.acheng9616.com:15789' },
   'stats.imgs_per_min': { zh: '张 / 分钟 <span style="color:var(--text-muted)">(GPU)</span>', en: 'imgs / min <span style="color:var(--text-muted)">(GPU)</span>' },
   'stats.success_rate': { zh: '自动检测成功率', en: 'Auto-Detection Success Rate' },
