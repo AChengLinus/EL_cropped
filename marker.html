@@ -107,7 +107,7 @@ body {
 .dd-sub-trigger { cursor: default; }
 .caret-r { margin-left: auto; font-size: 9px; opacity: .55; }
 .dd-submenu {
-  position: absolute; left: calc(100% + 2px); top: -4px; z-index: 310;
+  position: absolute; left: 100%; top: -4px; z-index: 310;
   min-width: 132px; background: var(--panel); border: 1px solid var(--border2);
   border-radius: 10px; padding: 4px; box-shadow: 0 8px 30px rgba(30,58,95,0.20);
   display: none;
@@ -320,7 +320,7 @@ body {
 <body>
 
 <header class="toolbar">
-  <div class="brand"><span class="logo"><img src="images/logo.png" alt="图片标记工具"></span><span>图片标记工具</span></div>
+  <div class="brand"><span class="logo"><img src="images/logo.png" alt="图片标记工具"></span><span>图片标记工具</span><span id="verTag" style="font-size:11px;color:#8aa0b4;margin-left:6px;font-weight:400">v1.1</span></div>
 
   <div class="tgroup">
     <button class="tbtn primary" id="btnUpload" title="上传/拖拽图片"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>上传图片</button>
@@ -1048,7 +1048,11 @@ body {
     var x0 = view.tx + p.x * view.scale, y0 = view.ty + p.y * view.scale;
     var x1 = view.tx + (p.x + p.w) * view.scale, y1 = view.ty + (p.y + p.h) * view.scale;
     if (x1 < -20 || x0 > W + 20 || y1 < -20 || y0 > H + 20) return;
-    ctx.globalAlpha = (p.alpha != null ? p.alpha : 1) * opacity;
+    var a = (p.alpha != null ? p.alpha : 1) * opacity;
+    ctx.globalAlpha = a * 0.2;        // 半透明填充内部
+    ctx.fillStyle = p.color;
+    ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+    ctx.globalAlpha = a;
     ctx.strokeStyle = p.color;
     ctx.lineWidth = Math.max(1.5, r * 0.32);
     ctx.setLineDash([7, 5]);
