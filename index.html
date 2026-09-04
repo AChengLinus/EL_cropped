@@ -265,6 +265,8 @@ body::before {
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-gh-btn:hover {
@@ -1274,6 +1276,22 @@ body::before {
 .version-card.offline-card {
   border-color: rgba(34, 197, 94, 0.2);
 }
+.version-card.marker-card {
+  grid-column: 1 / -1;
+  border-color: rgba(249, 115, 22, 0.25);
+}
+.version-card .vc-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  background: linear-gradient(90deg, #f97316, #ef4444);
+  vertical-align: middle;
+}
 @media (max-width: 600px) {
   .version-cards { grid-template-columns: 1fr; }
 }
@@ -1298,7 +1316,6 @@ body::before {
       <li><a href="#requirements" data-i18n="nav.requirements">系统要求</a></li>
       <li><a href="#usage" data-i18n="nav.usage">使用教程</a></li>
       <li><a href="#faq" data-i18n="nav.faq">常见问题</a></li>
-      <li><a href="marker.html" target="_blank" data-i18n="nav.marker">图片标记</a></li>
       <li style="display:flex;gap:6px">
         <button class="toggle-btn theme-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换主题">
           <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -1335,9 +1352,6 @@ body::before {
         <a href="#features" class="btn-secondary">
           <span data-i18n="hero.learn_more">了解更多</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-        </a>
-        <a href="marker.html" target="_blank" class="btn-secondary">
-          <span data-i18n="hero.marker">🎯 图片标记工具</span>
         </a>
       </div>
       <div class="terminal-line">
@@ -1988,7 +2002,6 @@ const translations = {
   'nav.requirements': { zh: '系统要求', en: 'Requirements' },
   'nav.faq': { zh: '常见问题', en: 'FAQ' },
   'nav.open_tool': { zh: '打开工具 →', en: 'Open Tool →' },
-  'nav.marker': { zh: '图片标记', en: 'Image Marker' },
   'hero.badge': { zh: 'v26.04.01 — 生产就绪', en: 'v26.04.01 — Production Ready' },
   'hero.title1': { zh: '太阳能电池板', en: 'Solar Panel' },
   'hero.title2': { zh: 'EL 检测图像', en: 'EL Inspection Image' },
@@ -1996,7 +2009,6 @@ const translations = {
   'hero.desc': { zh: '基于计算机视觉的智能裁剪工具。专为 EL（电致发光）成像系统在暗室环境拍摄的 LED 发光面板照片设计，自动检测面板四个角点，通过透视变换矫正为规整矩形。支持批量多线程处理、手动角点编辑校正、学习偏差自动优化。提供普通拍摄和无人机拍摄两种模式。', en: 'An intelligent cropping tool based on computer vision. Designed for LED panel EL (electroluminescence) images captured in darkroom environments. Auto-detects the four corners of panels and corrects them into regular rectangles via perspective transform. Supports batch multi-threaded processing, manual corner editing, and automatic learning-based bias optimization. Both standard and drone photography modes.' },
   'hero.quick_start': { zh: '快速开始', en: 'Quick Start' },
   'hero.learn_more': { zh: '了解更多', en: 'Learn More' },
-  'hero.marker': { zh: '🎯 图片标记工具', en: '🎯 Image Marker Tool' },
   'hero.service_at': { zh: '— 服务运行在 el.acheng9616.com:15789', en: '— Service at el.acheng9616.com:15789' },
   'stats.imgs_per_min': { zh: '张 / 分钟 <span style="color:var(--text-muted)">(GPU)</span>', en: 'imgs / min <span style="color:var(--text-muted)">(GPU)</span>' },
   'stats.success_rate': { zh: '自动检测成功率', en: 'Auto-Detection Success Rate' },
@@ -2180,6 +2192,8 @@ const translations = {
   'version.server_hint': { zh: '部署在局域网服务器，无需安装<br>浏览器访问 192.168.3.119:15789', en: 'Deployed on LAN server, no installation<br>Access via browser: 192.168.3.119:15789' },
   'version.offline_label': { zh: '下载离线版', en: 'Download Offline Version' },
   'version.offline_hint': { zh: '下载到本机使用，双击 EXE 启动<br>适合外网/远程办公场景', en: 'Download to your PC, double-click to launch<br>Ideal for remote/offsite work' },
+  'version.marker_label': { zh: '图片标记工具', en: 'Image Marker' },
+  'version.marker_hint': { zh: '在 EL 图像上手动标注点、框、文字<br>全新 BETA 版，欢迎试用', en: 'Manually annotate points, boxes & text on EL images<br>New BETA — try it out' },
   'version.cancel': { zh: '取消', en: 'Cancel' }
 };
 
@@ -2292,6 +2306,10 @@ function goOffline() {
   window.open('https://ug.link/acheng9616/filemgr/share-download/?id=68a7047f68a946b9afac624c9d112243', '_blank');
   closeVersionModal();
 }
+function goMarker() {
+  window.open('marker.html', '_blank');
+  closeVersionModal();
+}
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -2319,6 +2337,11 @@ applyTheme(currentTheme);
           <span class="vc-icon">💻</span>
           <span class="vc-label" data-i18n="version.offline_label">下载离线版</span>
           <span class="vc-hint" data-i18n="version.offline_hint">下载到本机使用，双击 EXE 启动<br>适合外网/远程办公场景</span>
+        </a>
+        <a href="javascript:void(0)" class="version-card marker-card" onclick="goMarker()">
+          <span class="vc-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+          <span class="vc-label"><span data-i18n="version.marker_label">图片标记工具</span><span class="vc-badge">NEW BETA</span></span>
+          <span class="vc-hint" data-i18n="version.marker_hint">在 EL 图像上手动标注点、框、文字<br>全新 BETA 版，欢迎试用</span>
         </a>
       </div>
       <div class="modal-actions">

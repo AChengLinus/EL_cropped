@@ -262,6 +262,13 @@ body {
   border-radius: 8px; padding: 8px 10px; font-size: 16px; width: 100%; font-family: inherit;
 }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.text-opts { display: flex; gap: 10px; }
+.text-opt { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.text-opt > span { font-size: 12px; color: var(--text2); }
+.text-opt input, .text-opt select {
+  background: var(--bg2); border: 1px solid var(--border2); color: var(--text);
+  border-radius: 8px; padding: 7px 9px; font-size: 14px; width: 100%; font-family: inherit;
+}
 
 /* 右键菜单 */
 .ctx-menu {
@@ -320,7 +327,7 @@ body {
 <body>
 
 <header class="toolbar">
-  <div class="brand"><span class="logo"><img src="images/logo.png" alt="图片标记工具"></span><span>图片标记工具</span><span id="verTag" style="font-size:11px;color:#8aa0b4;margin-left:6px;font-weight:400">v1.1</span></div>
+  <div class="brand"><span class="logo"><img src="images/logo.png" alt="图片标记工具"></span><span>图片标记工具</span><span id="verTag" style="font-size:11px;color:#8aa0b4;margin-left:6px;font-weight:400">v1.5</span></div>
 
   <div class="tgroup">
     <button class="tbtn primary" id="btnUpload" title="上传/拖拽图片"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>上传图片</button>
@@ -369,7 +376,6 @@ body {
         <button class="dd-item" id="btnImport"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>导入 CSV</button>
         <button class="dd-item" id="btnExportImg"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>导出整图</button>
         <button class="dd-item" id="btnExportView"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>导出窗口</button>
-        <button class="dd-item" id="btnCopy"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>复制数据</button>
       </div>
     </div>
   </div>
@@ -404,7 +410,6 @@ body {
       <div id="statColorList"></div>
       <div class="stat-actions">
         <button class="tbtn" id="btnExport2"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M12 10v10"/></svg>导出 CSV</button>
-        <button class="tbtn" id="btnCopy2"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>复制数据</button>
       </div>
     </div>
   </aside>
@@ -437,6 +442,10 @@ body {
   <div class="modal-box">
     <div class="modal-title" id="textModalTitle">文字描述</div>
     <input type="text" id="textInput" placeholder="输入描述文字">
+    <div class="text-opts">
+      <label class="text-opt"><span>字号 (px)</span><input type="number" id="textSizeInput" min="8" max="96" step="1" value="14"></label>
+      <label class="text-opt"><span>背景</span><select id="textBgSelect"><option value="dark">暗底</option><option value="none">透明</option></select></label>
+    </div>
     <div class="modal-actions">
       <button class="tbtn" id="textCancel"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>取消</button>
       <button class="tbtn primary" id="textOk"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>确定</button>
@@ -521,9 +530,7 @@ body {
   var btnClear = document.getElementById('btnClear');
   var btnLabels = document.getElementById('btnLabels');
   var btnExport = document.getElementById('btnExport');
-  var btnCopy = document.getElementById('btnCopy');
   var btnExport2 = document.getElementById('btnExport2');
-  var btnCopy2 = document.getElementById('btnCopy2');
   var btnImport = document.getElementById('btnImport');
   var btnExportImg = document.getElementById('btnExportImg');
   var btnExportView = document.getElementById('btnExportView');
@@ -552,6 +559,8 @@ body {
   var textInput = document.getElementById('textInput');
   var textOk = document.getElementById('textOk');
   var textCancel = document.getElementById('textCancel');
+  var textSizeInput = document.getElementById('textSizeInput');
+  var textBgSelect = document.getElementById('textBgSelect');
   var ctxMenu = document.getElementById('ctxMenu');
   var ctxCancel = document.getElementById('ctxCancel');
   var ctxDelete = document.getElementById('ctxDelete');
@@ -596,6 +605,8 @@ body {
   var renderPending = false;      // rAF 合并渲染
   var toastTimer = null;
   var previewCanvas = null;       // 降采样预览画布，缩放/平移交互时用
+  var imageLayer = null;          // 全分辨率图像图层缓存（当前视图，不含标注）
+  var imageLayerView = null;      // 缓存图层对应的视图快照
   var sharpenTimer = null;        // 交互结束后恢复全分辨率
   var pendingBox = null;          // 待确认的框区（等待输入数量）
   var pendingEditIdx = -1;        // 正在修改数量的已有框区索引（-1 表示新建）
@@ -637,6 +648,13 @@ body {
   function labelText(p) {
     if (p.type === 'box') return String(p.label) + '-' + (p.count || 1);
     return String(p.label);
+  }
+  function typeName(p) {
+    if (p.type === 'pen') return '标注笔';
+    if (p.type === 'frame') return '框图';
+    if (p.type === 'text') return '文字';
+    if (p.type === 'box') return '框选';
+    return '点';
   }
   function boxLabelFont(p) {
     var sz = (p && p.labelSize) || 'medium';
@@ -793,7 +811,10 @@ body {
   // 框选模式下的临时橡皮筋预览（画在 overlay 上，不重绘主画布）
   function overlayCtx() { return overlay.getContext('2d'); }
   function clearOverlay() {
-    overlayCtx().clearRect(0, 0, overlay.width, overlay.height);
+    var o = overlayCtx();
+    var dpr = overlay.dpr || 1;
+    o.setTransform(dpr, 0, 0, dpr, 0, 0);
+    o.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
   }
   function drawBoxPreview(x1, y1, x2, y2) {
     var o = overlayCtx();
@@ -882,15 +903,6 @@ body {
     } else if (p.type === 'text') {
       var tb = textBoxScreen(p);
       o.strokeRect(tb.x0, tb.y0, tb.w, tb.h);
-      if (markMode === 'text') {
-        var hx = tb.x0 + tb.w, hy = tb.y0 + tb.h;
-        o.setLineDash([]);
-        o.fillStyle = '#3b82f6';
-        o.fillRect(hx - 6, hy - 6, 12, 12);
-        o.strokeStyle = '#ffffff';
-        o.lineWidth = 1.5;
-        o.strokeRect(hx - 6, hy - 6, 12, 12);
-      }
     } else {
       var px = view.tx + p.x * view.scale, py = view.ty + p.y * view.scale;
       o.beginPath();
@@ -907,7 +919,8 @@ body {
       hoverIdx = hit;
       if (hit >= 0) {
         var p = points[hit];
-        hoverTip.textContent = '#' + labelText(p) + ' · ' + colorName(p.color);
+        var isAnn = p.type === 'pen' || p.type === 'text' || p.type === 'frame';
+        hoverTip.textContent = (isAnn ? typeName(p) : ('#' + labelText(p))) + ' · ' + colorName(p.color);
         drawHoverHighlight();
       } else {
         hoverTip.style.display = 'none';
@@ -931,25 +944,67 @@ body {
     ctx.fillRect(0, 0, W, H);
 
     if (img) {
-      ctx.save();
-      ctx.translate(view.tx, view.ty);
-      ctx.scale(view.scale, view.scale);
-      var src = (low && previewCanvas) ? previewCanvas : img;
-      ctx.drawImage(src, 0, 0, imgW, imgH);
-      ctx.restore();
-
-      // 图片边框
-      var x0 = view.tx, y0 = view.ty;
-      var x1 = view.tx + imgW * view.scale;
-      var y1 = view.ty + imgH * view.scale;
-      ctx.strokeStyle = 'rgba(30,58,95,0.22)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-
+      if (low) {
+        // 缩放/平移交互期间：用降采样预览保证流畅
+        ctx.save();
+        ctx.translate(view.tx, view.ty);
+        ctx.scale(view.scale, view.scale);
+        ctx.drawImage(previewCanvas || img, 0, 0, imgW, imgH);
+        ctx.restore();
+        strokeImageBorder(ctx);
+      } else {
+        // 全分辨率：复用缓存的图像图层，避免每次标注都重绘整张大图（点数不再模糊/卡顿）
+        if (imageLayerIsStale()) renderImageLayer();
+        ctx.drawImage(imageLayer, 0, 0, W, H);
+      }
       drawPoints(W, H, low);
     }
     zoomBadge.textContent = img ? ('缩放 ' + Math.round(view.scale * 100) + '%') : '';
     if (hoverIdx >= 0) drawHoverHighlight();
+  }
+
+  // 图片外框描边
+  function strokeImageBorder(g) {
+    var x0 = view.tx, y0 = view.ty;
+    var x1 = view.tx + imgW * view.scale;
+    var y1 = view.ty + imgH * view.scale;
+    g.strokeStyle = 'rgba(30,58,95,0.22)';
+    g.lineWidth = 1;
+    g.strokeRect(x0, y0, x1 - x0, y1 - y0);
+  }
+
+  // 全分辨率图像图层是否已过期（视图/尺寸/DPR 变化后需重建）
+  function imageLayerIsStale() {
+    var W = mainEl.clientWidth, H = mainEl.clientHeight;
+    var dpr = canvas.dpr || 1;
+    return !imageLayer || !imageLayerView ||
+      imageLayerView.scale !== view.scale ||
+      imageLayerView.tx !== view.tx ||
+      imageLayerView.ty !== view.ty ||
+      imageLayerView.W !== W ||
+      imageLayerView.H !== H ||
+      imageLayerView.dpr !== dpr;
+  }
+
+  // 把当前视图下的整张图片（全分辨率 + 外框）渲染到离屏图层，供快速复用
+  function renderImageLayer() {
+    var W = mainEl.clientWidth, H = mainEl.clientHeight;
+    var dpr = canvas.dpr || 1;
+    if (!imageLayer) imageLayer = document.createElement('canvas');
+    imageLayer.width = Math.round(W * dpr);
+    imageLayer.height = Math.round(H * dpr);
+    var g = imageLayer.getContext('2d');
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    if (img) {
+      g.save();
+      g.translate(view.tx, view.ty);
+      g.scale(view.scale, view.scale);
+      g.drawImage(img, 0, 0, imgW, imgH);
+      g.restore();
+      strokeImageBorder(g);
+    }
+    imageLayerView = { scale: view.scale, tx: view.tx, ty: view.ty, W: W, H: H, dpr: dpr };
   }
 
   function drawPoints(W, H, low) {
@@ -1080,7 +1135,10 @@ body {
   }
 
   function textFontSize(p) {
-    return TEXT_BASE * (p.size || 1);
+    var v = p.size || TEXT_BASE;   // 字号：直接存像素值，缺省用 TEXT_BASE
+    if (v < 6) v = 6;
+    if (v > 96) v = 96;
+    return v;
   }
   // 文字标注的屏幕包围盒（含 4px 内边距，与 drawText 一致）
   function textBoxScreen(p) {
@@ -1091,15 +1149,7 @@ body {
     var h = fs + 8;
     return { x0: view.tx + p.x * view.scale - 4, y0: view.ty + p.y * view.scale - 4, w: w, h: h };
   }
-  function textAnchorScreen(p) {
-    return { x: view.tx + p.x * view.scale, y: view.ty + p.y * view.scale };
-  }
-  // 是否命中文字右下角的缩放手柄
-  function textResizeHit(p, sx, sy) {
-    var b = textBoxScreen(p);
-    return Math.hypot(sx - (b.x0 + b.w), sy - (b.y0 + b.h)) <= 16;
-  }
-  // 命中检测：只检测文字标注（自顶向下），用于文字模式下的拖动/缩放，
+  // 命中检测：只检测文字标注（自顶向下），用于文字模式下的拖动，
   // 避免被覆盖在文字上方的框图/画笔等其它图层抢走选中
   function hitTestText(sx, sy) {
     for (var i = points.length - 1; i >= 0; i--) {
@@ -1121,9 +1171,12 @@ body {
     ctx.font = '600 ' + fs + 'px Inter, "Noto Sans SC", sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    var w = (ctx.measureText ? ctx.measureText(txt).width : txt.length * fs * 0.6) + 8;
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx.fillRect(sx - 4, sy - 4, w, fs + 8);
+    // 背景框与悬停虚线框共用同一几何计算（textBoxScreen），保证二者始终完全重合
+    var b = textBoxScreen(p);
+    if (p.bg !== 'none') {
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(b.x0, b.y0, b.w, b.h);
+    }
     ctx.fillStyle = p.color;
     ctx.fillText(txt, sx, sy);
   }
@@ -1133,15 +1186,18 @@ body {
     var dpr = overlay.dpr || 1;
     o.setTransform(dpr, 0, 0, dpr, 0, 0);
     o.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
-    var fs = TEXT_BASE * (size != null ? size : (p.size || 1));
+    var fs = size != null ? size : textFontSize(p);
+    if (fs < 6) fs = 6; if (fs > 96) fs = 96;
     var txt = p.text || '';
     o.font = '600 ' + fs + 'px Inter, "Noto Sans SC", sans-serif';
     o.textAlign = 'left';
     o.textBaseline = 'top';
     var w = (o.measureText ? o.measureText(txt).width : txt.length * fs * 0.6) + 8;
     var sx = view.tx + x * view.scale, sy = view.ty + y * view.scale;
-    o.fillStyle = 'rgba(0,0,0,0.45)';
-    o.fillRect(sx - 4, sy - 4, w, fs + 8);
+    if (p.bg !== 'none') {
+      o.fillStyle = 'rgba(0,0,0,0.45)';
+      o.fillRect(sx - 4, sy - 4, w, fs + 8);
+    }
     o.fillStyle = p.color;
     o.globalAlpha = 0.85;
     o.fillText(txt, sx, sy);
@@ -1213,15 +1269,24 @@ body {
     if (undoStack.length > 200) undoStack.shift();
   }
   function renumber() {
+    var colorCounts = {};   // 各颜色已编号计数：点数1/点数2……各自从 1 开始，互不累积
     for (var i = 0; i < points.length; i++) {
-      points[i].id = i + 1;
-      points[i].label = i + 1;
+      var p = points[i];
+      p.id = i + 1;
+      var tp = p.type;
+      if (tp === 'pen' || tp === 'text' || tp === 'frame') {
+        p.label = 0;   // 标注笔/文字/框图仅作标注，不参与编号
+      } else {
+        var key = p.color || '';
+        colorCounts[key] = (colorCounts[key] || 0) + 1;
+        p.label = colorCounts[key];
+      }
     }
   }
   function afterDataChange() {
     renumber();
     saveState(); refreshUI();
-    renderInteractive();   // 预览渲染避免大图全图重绘阻塞主线程（卡顿时点击仍能标记）
+    render(false);   // 标注变更直接全分辨率重绘（复用图像图层缓存，点数不再出现低分辨率模糊）
   }
   function addPoint(ix, iy) {
     pushUndo();
@@ -1303,14 +1368,15 @@ body {
     points.push({ id: 0, type: 'pen', color: toolColor, pts: pts, label: 0 });
     afterDataChange();
   }
-  function addText(x, y, text) {
+  function addText(x, y, text, size, bg) {
     if (!text) return;
     pushUndo();
     points.push({
       id: 0, type: 'text',
       x: Math.round(x * 10) / 10,
       y: Math.round(y * 10) / 10,
-      color: toolColor, text: text, label: 0
+      color: toolColor, text: text, label: 0,
+      size: size || TEXT_BASE, bg: bg || 'dark'
     });
     afterDataChange();
   }
@@ -1318,6 +1384,8 @@ body {
     pendingText = { x: x, y: y };
     pendingTextIdx = -1;
     textInput.value = '';
+    textSizeInput.value = TEXT_BASE;
+    textBgSelect.value = 'dark';
     if (textModalTitle) textModalTitle.textContent = '文字描述';
     textModal.style.display = 'flex';
     setTimeout(function () { textInput.focus(); }, 0);
@@ -1327,6 +1395,8 @@ body {
     pendingText = null;
     pendingTextIdx = idx;
     textInput.value = points[idx].text || '';
+    textSizeInput.value = textFontSize(points[idx]);
+    textBgSelect.value = points[idx].bg || 'dark';
     if (textModalTitle) textModalTitle.textContent = '修改文字';
     textModal.style.display = 'flex';
     setTimeout(function () { textInput.focus(); textInput.select(); }, 0);
@@ -1337,17 +1407,24 @@ body {
     textModal.style.display = 'none';
   }
   function confirmText() {
+    var size = parseFloat(textSizeInput.value);
+    if (!isFinite(size) || size <= 0) size = TEXT_BASE;
+    if (size < 6) size = 6;
+    if (size > 96) size = 96;
+    var bg = textBgSelect.value === 'none' ? 'none' : 'dark';
     if (pendingTextIdx >= 0 && points[pendingTextIdx] && points[pendingTextIdx].type === 'text') {
       var t2 = textInput.value.trim();
       if (!t2) { toast('请输入文字描述'); return; }
       pushUndo();
       points[pendingTextIdx].text = t2;
+      points[pendingTextIdx].size = size;
+      points[pendingTextIdx].bg = bg;
       afterDataChange();
       closeTextModal();
     } else if (pendingText) {
       var t = textInput.value.trim();
       if (!t) { toast('请输入文字描述'); return; }
-      addText(pendingText.x, pendingText.y, t);
+      addText(pendingText.x, pendingText.y, t, size, bg);
       closeTextModal();
     }
   }
@@ -1545,7 +1622,7 @@ body {
       }
       var lsz = p.type === 'box' ? (p.labelSize || 'medium') : '';
       var alpha = p.type === 'frame' ? (p.alpha != null ? p.alpha : 1) : '';
-      var tsz = p.type === 'text' ? (p.size != null ? p.size : 1) : '';
+      var tsz = p.type === 'text' ? (p.size != null ? p.size : TEXT_BASE) : '';
       lines.push([p.id, p.label, type, x, y, w, h, c, p.color, '"' + colorName(p.color) + '"', '"' + String(txt).replace(/"/g, '""') + '"', '"' + ptsStr + '"', lsz, alpha, tsz].join(','));
     }
     return lines.join('\n');
@@ -1569,28 +1646,6 @@ body {
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
     toast('已导出 CSV');
   }
-  function copyData() {
-    if (!points.length) { toast('暂无标注'); return; }
-    var csv = buildCSV();
-    function fallback() {
-      var ta = document.createElement('textarea');
-      ta.value = csv;
-      document.body.appendChild(ta);
-      ta.select();
-      var ok = false;
-      try { ok = document.execCommand('copy'); } catch (e) {}
-      ta.remove();
-      toast(ok ? '已复制到剪贴板' : '复制失败，请手动导出');
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(csv).then(function () {
-        toast('已复制到剪贴板');
-      }).catch(fallback);
-    } else {
-      fallback();
-    }
-  }
-
   // 导出带标注的图片。txFn(x,y) 将图像坐标映射到画布坐标。
   function drawAnnotationLayer(g, txFn, R, fs) {
     for (var i = 0; i < points.length; i++) {
@@ -1632,12 +1687,16 @@ body {
         }
       } else if (p.type === 'text') {
         var tp = txFn(p.x, p.y);
-        var tfs = Math.max(16, Math.round(R * 1.6)) * (p.size || 1);
+        var scale = R / Math.max(1, pointSize / 2);
+        var tfs = Math.max(6, (p.size || TEXT_BASE) * scale);
+        var pad = 4 * scale;
         g.font = '600 ' + tfs + 'px Inter, "Noto Sans SC", sans-serif';
         g.textAlign = 'left'; g.textBaseline = 'top';
-        var tw = g.measureText(p.text || '').width + 8;
-        g.fillStyle = 'rgba(0,0,0,0.55)';
-        g.fillRect(tp[0] - 4, tp[1] - 4, tw, tfs + 8);
+        var tw = g.measureText(p.text || '').width + pad * 2;
+        if (p.bg !== 'none') {
+          g.fillStyle = 'rgba(0,0,0,0.55)';
+          g.fillRect(tp[0] - pad, tp[1] - pad, tw, tfs + pad * 2);
+        }
         g.fillStyle = p.color;
         g.fillText(p.text || '', tp[0], tp[1]);
       } else {
@@ -1896,8 +1955,16 @@ body {
     } else {
       points = [];
     }
+    // 旧版文字字号迁移：旧版 size 为 0.4~6 的倍率，新版为像素字号
+    for (var mi = 0; mi < points.length; mi++) {
+      var mp = points[mi];
+      if (mp && mp.type === 'text' && typeof mp.size === 'number' && mp.size > 0 && mp.size <= 6) {
+        mp.size = Math.round(mp.size * TEXT_BASE);
+      }
+    }
     undoStack = [];
     renumber();
+    imageLayer = null; imageLayerView = null;
     buildPreview();
     fit();
     saveState();
@@ -2008,9 +2075,7 @@ body {
     saveState(); refreshUI(); render();
   });
   btnExport.addEventListener('click', exportCSV);
-  btnCopy.addEventListener('click', copyData);
   btnExport2.addEventListener('click', exportCSV);
-  btnCopy2.addEventListener('click', copyData);
   btnImport.addEventListener('click', function () { csvInput.click(); });
   btnExportImg.addEventListener('click', function () { exportImage('full'); });
   btnExportView.addEventListener('click', function () { exportImage('viewport'); });
@@ -2288,7 +2353,7 @@ body {
     var rect = canvas.getBoundingClientRect();
     var sx = e.clientX - rect.left, sy = e.clientY - rect.top;
     var mode = 'add', startIx = 0, startIy = 0;
-    var dragHit = -1, origX = 0, origY = 0, origSize = 1, startDist = 0;
+    var dragHit = -1, origX = 0, origY = 0;
     if (spaceDown || e.button === 1 || panMode) {
       mode = 'pan';
     } else if (markMode === 'box') {
@@ -2307,19 +2372,11 @@ body {
       var hitT = hitTestText(sx, sy);
       if (hitT >= 0 && points[hitT] && points[hitT].type === 'text') {
         var tp = points[hitT];
-        if (textResizeHit(tp, sx, sy)) {
-          mode = 'resizeText';
-          dragHit = hitT;
-          origSize = tp.size || 1;
-          var anchorR = textAnchorScreen(tp);
-          startDist = Math.hypot(sx - anchorR.x, sy - anchorR.y);
-        } else {
-          mode = 'moveText';
-          dragHit = hitT;
-          origX = tp.x; origY = tp.y;
-          var ipm = screenToImage(sx, sy);
-          startIx = ipm.x; startIy = ipm.y;
-        }
+        mode = 'moveText';
+        dragHit = hitT;
+        origX = tp.x; origY = tp.y;
+        var ipm = screenToImage(sx, sy);
+        startIx = ipm.x; startIy = ipm.y;
       } else {
         mode = 'text';
         var ip2 = screenToImage(sx, sy);
@@ -2329,7 +2386,7 @@ body {
     drag = {
       mode: mode, moved: false,
       startIx: startIx, startIy: startIy,
-      hit: dragHit, origX: origX, origY: origY, origSize: origSize, startDist: startDist,
+      hit: dragHit, origX: origX, origY: origY,
       pts: mode === 'pen' ? [[startIx, startIy]] : null,
       cx: e.clientX, cy: e.clientY,
       lastCx: e.clientX, lastCy: e.clientY
@@ -2358,14 +2415,7 @@ body {
       var rectM = canvas.getBoundingClientRect();
       var ipM = screenToImage(e.clientX - rectM.left, e.clientY - rectM.top);
       var ptM = points[drag.hit];
-      drawTextPreview(ptM, drag.origX + (ipM.x - drag.startIx), drag.origY + (ipM.y - drag.startIy), ptM.size || 1);
-    } else if (drag.mode === 'resizeText' && drag.moved) {
-      var rectR = canvas.getBoundingClientRect();
-      var ptR = points[drag.hit];
-      var anchorR = textAnchorScreen(ptR);
-      var distR = Math.hypot((e.clientX - rectR.left) - anchorR.x, (e.clientY - rectR.top) - anchorR.y);
-      var newSize = clamp(drag.origSize * (distR / Math.max(1, drag.startDist)), 0.4, 6);
-      drawTextPreview(ptR, ptR.x, ptR.y, newSize);
+      drawTextPreview(ptM, drag.origX + (ipM.x - drag.startIx), drag.origY + (ipM.y - drag.startIy), ptM.size || null);
     } else if (drag.moved) {
       // 拖动期间用 GPU 合成层平移，避免每帧重绘大图导致卡顿
       panShift.x += dx;
@@ -2408,17 +2458,6 @@ body {
         pushUndo();
         points[drag.hit].x = Math.round((drag.origX + (ipM2.x - drag.startIx)) * 10) / 10;
         points[drag.hit].y = Math.round((drag.origY + (ipM2.y - drag.startIy)) * 10) / 10;
-        afterDataChange();
-      }
-    } else if (drag.mode === 'resizeText') {
-      clearOverlay();
-      if (drag.moved && drag.hit >= 0 && points[drag.hit]) {
-        var rectR2 = canvas.getBoundingClientRect();
-        var anchorR2 = textAnchorScreen(points[drag.hit]);
-        var distR2 = Math.hypot((e.clientX - rectR2.left) - anchorR2.x, (e.clientY - rectR2.top) - anchorR2.y);
-        var newSize = clamp(drag.origSize * (distR2 / Math.max(1, drag.startDist)), 0.4, 6);
-        pushUndo();
-        points[drag.hit].size = Math.round(newSize * 100) / 100;
         afterDataChange();
       }
     } else if (drag.mode === 'text') {
@@ -2503,6 +2542,12 @@ body {
   loadSettings();
   refreshUI();
   resizeCanvas();
+
+  // 字体（Inter / Noto Sans SC）异步加载完成后重绘一次，确保文字测量与实际渲染一致，
+  // 避免字体未就绪时用回退字体测量导致文字背景框/选中虚线框与文字错位
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { if (img) render(false); });
+  }
 })();
 </script>
 </body>
