@@ -399,9 +399,25 @@
     .toolbar-layout {
       display: grid;
       grid-template-columns: minmax(420px, 560px) 1fr;
-      align-items: end;
+      align-items: center;
       gap: 22px;
       margin-bottom: 18px;
+    }
+
+    .toolbar-layout .stats-grid {
+      grid-row: 1;
+      grid-column: 1 / -1;
+    }
+
+    .toolbar-layout .filter-field {
+      grid-row: 2;
+      grid-column: 1;
+    }
+
+    .toolbar-layout .filtered-summary {
+      grid-row: 2;
+      grid-column: 2;
+      justify-self: end;
     }
 
     .data-main-heading {
@@ -1240,7 +1256,7 @@
     }
 
     .toast.success {
-      background: #1d684c;
+      background: var(--primary);
     }
 
     .toast.warning {
@@ -1260,6 +1276,8 @@
 
     dialog {
       width: min(560px, calc(100vw - 32px));
+      max-height: min(90vh, 780px);
+      overflow: auto;
       padding: 0;
       color: var(--text);
       background: var(--surface);
@@ -1319,6 +1337,107 @@
       padding: 18px 20px;
     }
 
+    .project-start-field {
+      gap: 9px;
+    }
+
+    .project-start-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .project-start-clear {
+      padding: 2px 7px;
+      color: var(--muted);
+      background: transparent;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .project-start-clear:hover {
+      color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    .project-date-trigger {
+      width: 100%;
+      min-height: 42px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 11px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 7px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .project-date-trigger:hover,
+    .project-date-trigger.is-active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .project-date-trigger svg {
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+    }
+
+    .project-date-trigger svg:last-child {
+      width: 13px;
+      height: 13px;
+      color: var(--muted);
+    }
+
+    .project-date-trigger span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .project-calendar {
+      width: min(100%, 390px);
+      margin: 0 auto;
+      padding: 11px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .project-calendar[hidden] {
+      display: none;
+    }
+
+    .project-calendar .calendar-day {
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .project-calendar .calendar-day:hover {
+      background: var(--primary-soft);
+    }
+
+    .project-calendar .calendar-day.is-today {
+      outline: 1px solid rgba(47, 128, 237, 0.42);
+    }
+
+    .project-calendar .calendar-day.is-selected {
+      color: #fff;
+      background: var(--primary);
+      outline: 0;
+    }
+
+    .project-calendar .calendar-day.is-empty {
+      visibility: hidden;
+    }
+
     .dialog-footer {
       display: flex;
       justify-content: flex-end;
@@ -1351,6 +1470,12 @@
 
       .toolbar-layout {
         grid-template-columns: 1fr;
+      }
+
+      .toolbar-layout .filtered-summary {
+        grid-row: 3;
+        grid-column: 1;
+        justify-self: start;
       }
 
       .filter-field {
@@ -1572,11 +1697,6 @@
             <p>数据时间范围筛选结果按时间升序排列，重复时间会按非空字段合并。</p>
           </div>
           <div class="data-main-actions">
-            <div class="filtered-summary" id="filteredSummary">
-              <i data-lucide="list-filter"></i>
-              <span>当前筛选结果</span>
-              <strong id="filteredCount">0 条</strong>
-            </div>
             <span class="source-badge" id="sourceBadge" title="暂无来源文件">暂无来源文件</span>
             <div class="menu-shell" id="exportMenuShell">
               <button class="button button-primary" id="exportMenuButton" type="button" aria-expanded="false" disabled>
@@ -1687,18 +1807,23 @@
               </div>
             </div>
           </div>
+          <div class="filtered-summary" id="filteredSummary">
+            <i data-lucide="list-filter"></i>
+            <span>当前筛选结果</span>
+            <strong id="filteredCount">0 条</strong>
+          </div>
           <div class="stats-grid" aria-label="数据统计">
             <div class="stat">
               <span class="stat-label">
                 <i data-lucide="database"></i>
-                合并后数据
+                总数据量
               </span>
               <span class="stat-value" id="totalCount">0 条</span>
             </div>
             <div class="stat">
               <span class="stat-label">
                 <i data-lucide="calendar-range"></i>
-                数据日期范围
+                总数据日期范围
               </span>
               <span class="stat-value small" id="dateRange">暂无数据</span>
             </div>
@@ -1778,9 +1903,39 @@
           <label for="dialogName">项目名称 <span class="required-mark">*</span></label>
           <input class="input" id="dialogName" type="text" maxlength="80" required placeholder="例如：A区屋顶光伏项目">
         </div>
-        <div class="field">
-          <label for="dialogStartDate">项目起始时间（选填）</label>
-          <input class="input" id="dialogStartDate" type="datetime-local">
+        <div class="field project-start-field">
+          <div class="project-start-heading">
+            <label>项目起始日期（选填）</label>
+            <button class="project-start-clear" id="dialogStartClearButton" type="button">清空</button>
+          </div>
+
+          <button class="project-date-trigger" id="dialogStartDateButton" type="button">
+            <i data-lucide="calendar-days"></i>
+            <span id="dialogStartDateLabel">未设置日期</span>
+            <i data-lucide="chevron-down"></i>
+          </button>
+
+          <div class="project-calendar" id="dialogStartCalendar" hidden>
+            <div class="calendar-header">
+              <button class="calendar-nav" id="dialogCalendarPrevButton" type="button" aria-label="上个月">
+                <i data-lucide="chevron-left"></i>
+              </button>
+              <strong id="dialogCalendarMonthLabel"></strong>
+              <button class="calendar-nav" id="dialogCalendarNextButton" type="button" aria-label="下个月">
+                <i data-lucide="chevron-right"></i>
+              </button>
+            </div>
+            <div class="calendar-weekdays" aria-hidden="true">
+              <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+            </div>
+            <div class="calendar-days" id="dialogCalendarDays"></div>
+            <div class="calendar-footer">
+              <span>项目起始时间为选填项</span>
+              <button id="dialogCalendarTodayButton" type="button">今天</button>
+            </div>
+          </div>
+
+          <input id="dialogStartDate" type="hidden">
         </div>
       </div>
       <div class="dialog-footer">
@@ -1890,6 +2045,7 @@
       draftEndDateTime: "",
       rangeCalendarMonth: "",
       rangeCalendarTarget: "start",
+      projectCalendarMonth: "",
       databaseAvailable: true,
       isImporting: false,
       pendingImportTarget: null,
@@ -1969,9 +2125,19 @@
       elements.tableWrap = document.getElementById("tableWrap");
       elements.projectDialog = document.getElementById("projectDialog");
       elements.projectDialogForm = document.getElementById("projectDialogForm");
+      elements.projectStartField = document.querySelector(".project-start-field");
       elements.dialogLocation = document.getElementById("dialogLocation");
       elements.dialogName = document.getElementById("dialogName");
       elements.dialogStartDate = document.getElementById("dialogStartDate");
+      elements.dialogStartClearButton = document.getElementById("dialogStartClearButton");
+      elements.dialogStartDateButton = document.getElementById("dialogStartDateButton");
+      elements.dialogStartDateLabel = document.getElementById("dialogStartDateLabel");
+      elements.dialogStartCalendar = document.getElementById("dialogStartCalendar");
+      elements.dialogCalendarPrevButton = document.getElementById("dialogCalendarPrevButton");
+      elements.dialogCalendarNextButton = document.getElementById("dialogCalendarNextButton");
+      elements.dialogCalendarMonthLabel = document.getElementById("dialogCalendarMonthLabel");
+      elements.dialogCalendarDays = document.getElementById("dialogCalendarDays");
+      elements.dialogCalendarTodayButton = document.getElementById("dialogCalendarTodayButton");
       elements.closeProjectDialog = document.getElementById("closeProjectDialog");
       elements.cancelProjectDialog = document.getElementById("cancelProjectDialog");
       elements.loadingOverlay = document.getElementById("loadingOverlay");
@@ -2035,6 +2201,18 @@
       });
 
       elements.projectDialogForm.addEventListener("submit", confirmProjectDialog);
+      elements.dialogStartDateButton.addEventListener("click", () => {
+        elements.dialogStartCalendar.hidden = !elements.dialogStartCalendar.hidden;
+        elements.dialogStartDateButton.classList.toggle("is-active", !elements.dialogStartCalendar.hidden);
+        if (!elements.dialogStartCalendar.hidden) {
+          renderProjectStartCalendar();
+        }
+      });
+      elements.dialogStartClearButton.addEventListener("click", clearProjectStartDateTime);
+      elements.dialogCalendarPrevButton.addEventListener("click", () => changeProjectCalendarMonth(-1));
+      elements.dialogCalendarNextButton.addEventListener("click", () => changeProjectCalendarMonth(1));
+      elements.dialogCalendarDays.addEventListener("click", handleProjectCalendarDayClick);
+      elements.dialogCalendarTodayButton.addEventListener("click", setProjectStartToToday);
       elements.closeProjectDialog.addEventListener("click", closeProjectDialog);
       elements.cancelProjectDialog.addEventListener("click", closeProjectDialog);
       elements.projectDialog.addEventListener("cancel", () => {
@@ -2063,6 +2241,10 @@
       closeMenus();
       if (!elements.timeRangePicker.contains(event.target)) {
         closeTimeRangePanel(false);
+      }
+      if (!elements.projectStartField.contains(event.target)) {
+        elements.dialogStartCalendar.hidden = true;
+        elements.dialogStartDateButton.classList.remove("is-active");
       }
     }
 
@@ -2157,8 +2339,8 @@
       const projectStartDate = elements.projectStartDate.value.trim();
       elements.projectChipName.textContent = projectName || "未设置项目";
       elements.projectChipTime.textContent = projectStartDate
-        ? `起始时间：${projectStartDate.replace("T", " ")}`
-        : "起始时间未设置";
+        ? `起始日期：${projectStartDate.slice(0, 10)}`
+        : "起始日期未设置";
     }
 
     function requestImport(target) {
@@ -2198,9 +2380,7 @@
       elements.dialogLocation.value = elements.projectLocation.value.trim();
       elements.dialogName.value = elements.projectName.value.trim();
       const projectStartDate = elements.projectStartDate.value || "";
-      elements.dialogStartDate.value = projectStartDate && !projectStartDate.includes("T")
-        ? `${projectStartDate}T00:00`
-        : projectStartDate;
+      setProjectStartPickerValue(projectStartDate);
 
       if (typeof elements.projectDialog.showModal === "function") {
         elements.projectDialog.showModal();
@@ -2213,6 +2393,8 @@
 
     function closeProjectDialog() {
       state.pendingImportTarget = null;
+      elements.dialogStartCalendar.hidden = true;
+      elements.dialogStartDateButton.classList.remove("is-active");
       if (elements.projectDialog.open) {
         elements.projectDialog.close();
       }
@@ -2235,6 +2417,126 @@
       if (importTarget) {
         openImportPicker(importTarget);
       }
+    }
+
+    function setProjectStartPickerValue(value) {
+      const normalized = normalizeProjectDate(value);
+
+      if (!normalized) {
+        elements.dialogStartDate.value = "";
+        elements.dialogStartDateLabel.textContent = "未设置日期";
+        state.projectCalendarMonth = getCurrentMonthValue();
+        renderProjectStartCalendar();
+        return;
+      }
+
+      elements.dialogStartDate.value = normalized;
+      elements.dialogStartDateLabel.textContent = normalized;
+      state.projectCalendarMonth = normalized.slice(0, 7);
+      renderProjectStartCalendar();
+    }
+
+    function normalizeProjectDate(value) {
+      const text = String(value || "").trim();
+      if (!text) {
+        return "";
+      }
+
+      const match = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!match) {
+        return "";
+      }
+      return isValidDateParts(
+        Number.parseInt(match[1], 10),
+        Number.parseInt(match[2], 10),
+        Number.parseInt(match[3], 10),
+        0,
+        0,
+        0
+      ) ? `${match[1]}-${match[2]}-${match[3]}` : "";
+    }
+
+    function clearProjectStartDateTime() {
+      setProjectStartPickerValue("");
+      elements.dialogStartCalendar.hidden = false;
+      elements.dialogStartDateButton.classList.add("is-active");
+      renderProjectStartCalendar();
+    }
+
+    function handleProjectCalendarDayClick(event) {
+      const button = event.target.closest("[data-project-calendar-date]");
+      if (!button) {
+        return;
+      }
+      event.stopPropagation();
+
+      const date = button.dataset.projectCalendarDate;
+      setProjectStartPickerValue(date);
+    }
+
+    function changeProjectCalendarMonth(offset) {
+      const month = parseMonthValue(state.projectCalendarMonth) || new Date();
+      month.setMonth(month.getMonth() + offset);
+      state.projectCalendarMonth = `${month.getFullYear()}-${pad2(month.getMonth() + 1)}`;
+      renderProjectStartCalendar();
+    }
+
+    function setProjectStartToToday() {
+      const today = new Date();
+      const date = formatDateParts(today.getFullYear(), today.getMonth() + 1, today.getDate());
+      setProjectStartPickerValue(date);
+    }
+
+    function renderProjectStartCalendar() {
+      const month = parseMonthValue(state.projectCalendarMonth) || new Date();
+      const year = month.getFullYear();
+      const monthNumber = month.getMonth() + 1;
+      const selectedDate = normalizeProjectDate(elements.dialogStartDate.value);
+      const today = new Date();
+      const todayValue = formatDateParts(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+      elements.dialogCalendarMonthLabel.textContent = `${year} 年 ${monthNumber} 月`;
+      elements.dialogCalendarDays.innerHTML = "";
+
+      const firstWeekday = (new Date(year, monthNumber - 1, 1).getDay() + 6) % 7;
+      const daysInMonth = new Date(year, monthNumber, 0).getDate();
+
+      for (let index = 0; index < firstWeekday; index += 1) {
+        const spacer = document.createElement("span");
+        spacer.className = "calendar-day is-empty";
+        elements.dialogCalendarDays.appendChild(spacer);
+      }
+
+      for (let day = 1; day <= daysInMonth; day += 1) {
+        const date = formatDateParts(year, monthNumber, day);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "calendar-day";
+        button.textContent = String(day);
+        button.dataset.projectCalendarDate = date;
+
+        if (date === todayValue) {
+          button.classList.add("is-today");
+        }
+        if (date === selectedDate) {
+          button.classList.add("is-selected");
+        }
+
+        elements.dialogCalendarDays.appendChild(button);
+      }
+    }
+
+    function parseMonthValue(value) {
+      const match = String(value || "").match(/^(\d{4})-(\d{2})$/);
+      if (!match) {
+        return null;
+      }
+      return new Date(Number.parseInt(match[1], 10), Number.parseInt(match[2], 10) - 1, 1);
+    }
+
+    function getCurrentMonthValue() {
+      const now = new Date();
+      return `${now.getFullYear()}-${pad2(now.getMonth() + 1)}`;
     }
 
     async function handleFolderSelection(event) {
