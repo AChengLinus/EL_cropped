@@ -1847,7 +1847,7 @@
                   <th>组件温度(°C)</th>
                   <th>总辐射(W/m2)</th>
                   <th>总辐射2(W/m2)</th>
-                  <th>总辐射累计值(MJ)</th>
+                  <th>总辐射1累计值(MJ)</th>
                   <th>总辐射2累计值(MJ)</th>
                 </tr>
               </thead>
@@ -1990,7 +1990,7 @@
           { key: "moduleTemp", label: "组件温度(°C)", aliases: ["组件温度", "组件温", "组件温度值", "paneltemperature"], decimals: 1, transform: (value) => (value - 500) / 10 },
           { key: "irradiance", label: "总辐射1(W/m2)", aliases: ["总辐射", "总辐射1", "总辐照度", "总辐照", "辐照度", "ghi", "poa"], decimals: 0, transform: (value) => value },
           { key: "irradiance2", label: "总辐射2(W/m2)", aliases: ["总辐射2", "总辐照度2", "总辐照2", "辐照度2", "ghi2", "poa2"], decimals: 0, transform: (value) => value },
-          { key: "irradianceCumulative", label: "总辐射累计值(MJ)", aliases: ["总辐射累计值", "总辐照度累计值", "总辐照累计值", "累计辐射"], decimals: 3, transform: (value) => value / 1000 },
+          { key: "irradianceCumulative", label: "总辐射1累计值(MJ)", aliases: ["总辐射累计值", "总辐射1累计值", "总辐照度累计值", "总辐照累计值", "累计辐射"], decimals: 3, transform: (value) => value / 1000 },
           { key: "irradiance2Cumulative", label: "总辐射2累计值(MJ)", aliases: ["总辐射2累计值", "总辐照度2累计值", "总辐照2累计值", "累计辐射2"], decimals: 3, transform: (value) => value / 1000 }
         ]
       },
@@ -2008,7 +2008,7 @@
           { key: "irradiance", label: "总辐射1(W/m2)", aliases: ["总辐射", "总辐射1", "总辐照度"], decimals: 0, transform: (value) => value },
           { key: "irradiance2", label: "总辐射2(W/m2)", aliases: ["总辐射2", "总辐照度2"], decimals: 0, transform: (value) => value },
           { key: "irradiance3", label: "总辐射3(W/m2)", aliases: ["总辐射3", "总辐照度3"], decimals: 0, transform: (value) => value },
-          { key: "irradianceCumulative", label: "总辐射累计值(MJ)", aliases: ["总辐射累计值", "总辐照度累计值"], decimals: 3, transform: (value) => value / 1000 },
+          { key: "irradianceCumulative", label: "总辐射1累计值(MJ)", aliases: ["总辐射累计值", "总辐射1累计值", "总辐照度累计值"], decimals: 3, transform: (value) => value / 1000 },
           { key: "irradiance2Cumulative", label: "总辐射2累计值(MJ)", aliases: ["总辐射2累计值", "总辐射累计值2", "总辐照度2累计值"], decimals: 3, transform: (value) => value / 1000 },
           { key: "irradiance3Cumulative", label: "总辐射3累计值(MJ)", aliases: ["总辐射3累计值", "总辐照度3累计值"], decimals: 3, transform: (value) => value / 1000 },
           { key: "battery", label: "电池电量(%)", aliases: ["电池电量", "电量"], decimals: 0, transform: (value) => value },
