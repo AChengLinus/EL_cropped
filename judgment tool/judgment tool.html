@@ -331,11 +331,11 @@ function colorOf(label) { for (const L of state.levels) if (L.label === label) r
 function levelIdxOfKey(k) { return { '1':0,'2':1,'3':2,'4':3,'5':4,'6':5,'7':6,'8':7,'9':8,'0':9 }[k]; }
 
 function isGroupStart(i) {
-  if (i <= 0) return true;
+  if (i < 0) return false;
   const e = state.images[ALL[i].name];
   if (e && e.isStart === true) return true;
   if (e && e.isStart === false) return false;
-  return (ALL[i].ts - ALL[i - 1].ts) > state.threshold;
+  return i > 0 && (ALL[i].ts - ALL[i - 1].ts) > state.threshold;
 }
 function groupRange(i) {
   let start = 0;
@@ -555,6 +555,7 @@ document.addEventListener('keydown', function (ev) {
 function jumpUnjudged(dir) {
   if (!ALL.length) return;
   for (let i = cur + dir; i >= 0 && i < ALL.length; i += dir) {
+    if (isGroupStart(i)) continue;
     const e = state.images[ALL[i].name];
     if (!e || !e.points.length) { setCur(i); return; }
   }
@@ -623,11 +624,16 @@ function pickColor(i) {
 }
 
 function updateProgress() {
-  let judged = 0;
-  for (let i = 0; i < ALL.length; i++) { const e = state.images[ALL[i].name]; if (e && e.points.length) judged++; }
-  const pct = ALL.length ? Math.round(judged / ALL.length * 100) : 0;
+  let judged = 0, total = 0;
+  for (let i = 0; i < ALL.length; i++) {
+    if (isGroupStart(i)) continue;
+    total++;
+    const e = state.images[ALL[i].name];
+    if (e && e.points.length) judged++;
+  }
+  const pct = total ? Math.round(judged / total * 100) : 0;
   pbar.style.width = pct + '%';
-  ptext.textContent = '已判定 ' + judged + ' / ' + ALL.length + '（' + pct + '%）';
+  ptext.textContent = '已判定 ' + judged + ' / ' + total + '（' + pct + '%）';
 }
 
 function showPreview(src, cell) {
@@ -767,19 +773,19 @@ function csvCell(v) {
   return v;
 }
 function exportCSV() {
-  const header = ['文件名'].concat(state.levels.map(function (L) { return '等级' + L.label; })).concat(['未判定', '总点数', '备注', '点明细(像素X,像素Y,等级)']);
+  const header = ['文件名'].concat(state.levels.map(function (L) { return '等级' + L.label; })).concat(['总点数', '备注', '点明细(像素X,像素Y,等级)']);
   const rows = [header];
-  ALL.forEach(function (it) {
+  ALL.forEach(function (it, i) {
     const e = state.images[it.name];
     const pts = e ? (e.points || []) : [];
+    const isPano = isGroupStart(i);
     const c = {};
     state.levels.forEach(function (L) { c[L.label] = 0; });
-    let none = 0;
-    pts.forEach(function (p) { if (p.g) c[p.g] = (c[p.g] || 0) + 1; else none++; });
+    pts.forEach(function (p) { if (p.g) c[p.g] = (c[p.g] || 0) + 1; });
     const detail = pts.map(function (p) { return p.px + ',' + p.py + ',' + (p.g || ''); }).join(';');
     const row = [it.name];
-    state.levels.forEach(function (L) { row.push(c[L.label] || 0); });
-    row.push(none, pts.length, e ? (e.note || '') : '', detail);
+    state.levels.forEach(function (L) { row.push(isPano ? '' : (c[L.label] || 0)); });
+    row.push(isPano ? '' : pts.length, e ? (e.note || '') : '', detail);
     rows.push(row);
   });
   download('判定.csv', rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n'), 'text/csv');
